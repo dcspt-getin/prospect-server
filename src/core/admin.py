@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Permission
-from .models import Translation, Configuration
+from .models import Translation, Configuration, Question, QuestionOption, UserProfile
 from django.template.response import TemplateResponse
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
@@ -14,6 +14,8 @@ import json
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from openpyxl import load_workbook
 from django_json_widget.widgets import JSONEditorWidget
+from reversion.admin import VersionAdmin
+import nested_admin
 
 
 # def import_action(self, request, import_method, *args, **kwargs):
@@ -91,6 +93,29 @@ class TranslationAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     fields = ('id', 'language', 'language_code', 'translations')
     list_display = ('id', 'language', 'language_code')
+    formfield_overrides = {
+        models.JSONField: {'widget': JSONEditorWidget},
+    }
+
+class QuestionOptionInline(nested_admin.NestedTabularInline):
+    model = QuestionOption
+    sortable_field_name = "row_order"
+    fields = ('title', 'description', 'row_order')
+    extra = 0
+
+@admin.register(Question)
+class QuestionAdmin(nested_admin.NestedModelAdmin):
+    readonly_fields = ('id',)
+    fields = ('id', 'key', 'title', 'description','image', 'image_url', 'question_type', 'default_value', 'input_type', 'multiple_selection_type', 'status')
+    list_display = ('id', 'title', 'question_type', 'status')
+    inlines = [QuestionOptionInline]
+
+@admin.register(UserProfile)
+class UserProfileAdmin(VersionAdmin):
+    readonly_fields = ('id', 'created_at', 'updated_at',)
+    fields = ('id', 'created_at', 'updated_at', 'user', 'profile_data', 'status')
+    list_display = ('id', 'user', 'status')
+    list_filter = ('status', 'user') 
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }

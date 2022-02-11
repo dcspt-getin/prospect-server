@@ -41,6 +41,7 @@ def trigger_error(request):
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', ShowHelloWorld.as_view()),
+    url(r'^_nested_admin/', include('nested_admin.urls')),
     path('api/', include(router.urls)),
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

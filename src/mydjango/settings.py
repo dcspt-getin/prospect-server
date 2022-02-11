@@ -66,6 +66,8 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'filer',
     'mptt',
+    'reversion',
+    'nested_admin',
     'dbbackup',  # django-dbbackup
 ]
 
