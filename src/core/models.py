@@ -29,13 +29,14 @@ MULTIPLE_SELECTION_TYPE_CHOICES = [
     ('SELECT', 'Select'),
 ]
 
+
 class Configuration(models.Model):
     key = models.CharField(max_length=60, blank=False, unique=True, null=False)
     value = models.CharField(max_length=256, blank=True)
 
     def __str__(self):
         return self.key
-    
+
     class Meta:
         permissions = ()
 
@@ -80,28 +81,29 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
         permissions = ()
 
 
 class QuestionOption(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name='options')
 
-    row_order = models.IntegerField(max_length=30, blank=False, null=False, default=0)
+    row_order = models.IntegerField(blank=False, null=False, default=0)
     title = models.CharField(max_length=256, blank=False, null=False)
     description = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
         permissions = ()
 
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     profile_data = models.JSONField(blank=True, null=True)

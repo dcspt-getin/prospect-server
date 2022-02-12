@@ -54,7 +54,7 @@ import nested_admin
 #             return HttpResponse(_(u"<h1>%s encountered while trying to read file: %s</h1>" % (type(e).__name__, import_file.name)))
 
 #         import_method(import_file, data)
-    
+
 #         res_kwargs = self.get_import_resource_kwargs(request, form=form, *args, **kwargs)
 #         resource = self.get_import_resource_class()(**res_kwargs)
 #     else:
@@ -77,7 +77,9 @@ import nested_admin
 class PermissionAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
-UserAdmin.list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
+
+UserAdmin.list_display = (
+    'username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
 
 GroupAdmin.list_display = ('id', 'name')
 
@@ -88,6 +90,7 @@ class ConfigurationAdmin(admin.ModelAdmin):
     fields = ('id', 'key', 'value')
     list_display = ('id', 'key', 'value')
 
+
 @admin.register(Translation)
 class TranslationAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
@@ -97,25 +100,30 @@ class TranslationAdmin(admin.ModelAdmin):
         models.JSONField: {'widget': JSONEditorWidget},
     }
 
+
 class QuestionOptionInline(nested_admin.NestedTabularInline):
     model = QuestionOption
     sortable_field_name = "row_order"
     fields = ('title', 'description', 'row_order')
     extra = 0
 
+
 @admin.register(Question)
 class QuestionAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id',)
-    fields = ('id', 'key', 'title', 'description','image', 'image_url', 'question_type', 'default_value', 'input_type', 'multiple_selection_type', 'status')
+    fields = ('id', 'key', 'title', 'description', 'image', 'image_url', 'question_type',
+              'default_value', 'input_type', 'multiple_selection_type', 'status')
     list_display = ('id', 'title', 'question_type', 'status')
     inlines = [QuestionOptionInline]
+
 
 @admin.register(UserProfile)
 class UserProfileAdmin(VersionAdmin):
     readonly_fields = ('id', 'created_at', 'updated_at',)
-    fields = ('id', 'created_at', 'updated_at', 'user', 'profile_data', 'status')
+    fields = ('id', 'created_at', 'updated_at',
+              'user', 'profile_data', 'status')
     list_display = ('id', 'user', 'status')
-    list_filter = ('status', 'user') 
+    list_filter = ('status', 'user')
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }

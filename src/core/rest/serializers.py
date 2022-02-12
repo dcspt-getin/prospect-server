@@ -2,10 +2,11 @@
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
-from core.models import Configuration, Translation
+from core.models import Configuration, Question, QuestionOption, Translation
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenObtainSerializer
 from rest_framework import exceptions
 from django.utils.translation import gettext_lazy as _
+
 
 class MyTokenObtainSerializer(TokenObtainPairSerializer, TokenObtainSerializer):
     def validate(self, attrs):
@@ -22,7 +23,8 @@ class MyTokenObtainSerializer(TokenObtainPairSerializer, TokenObtainSerializer):
 
         if self.user is None:
             try:
-                user_temp = get_user_model().objects.get(username=attrs[self.username_field])
+                user_temp = get_user_model().objects.get(
+                    username=attrs[self.username_field])
             except:
                 user_temp = None
 
@@ -46,11 +48,13 @@ class MyTokenObtainSerializer(TokenObtainPairSerializer, TokenObtainSerializer):
 
         return data
 
-class GroupSerializer(serializers.ModelSerializer):    
+
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('id', 'name',)
-        
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(
         write_only=True,
@@ -59,7 +63,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name', 'groups')
+        fields = ('id', 'username', 'password', 'email',
+                  'first_name', 'last_name', 'groups')
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -78,10 +83,25 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class ConfigurationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Configuration
-        fields = ['id', 'key', 'value',]
+        fields = ['id', 'key', 'value', ]
 
 
 class TranslationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Translation
         fields = ['id', 'language', 'language_code', 'translations']
+
+
+class QuestionOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionOption
+        fields = ['id', 'title', 'description', 'row_order']
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    options = QuestionOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Question
+        fields = ['id', 'key', 'title', 'description', 'image', 'image_url', 'question_type',
+                  'default_value', 'input_type', 'multiple_selection_type', 'status', 'options']

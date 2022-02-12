@@ -7,8 +7,9 @@ from rest_framework_simplejwt.views import TokenViewBase
 from django_filters import rest_framework as filters
 from rest_framework.permissions import DjangoModelPermissions
 
-from .serializers import TranslationSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer
-from core.models import Configuration, Translation
+from .serializers import QuestionSerializer, TranslationSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer
+from core.models import Configuration, Question, Translation
+
 
 class CustomDjangoModelPermissions(DjangoModelPermissions):
     def __init__(self):
@@ -32,7 +33,8 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated, CustomDjangoModelPermissions]
+    permission_classes = [permissions.IsAuthenticated,
+                          CustomDjangoModelPermissions]
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = {
         'groups__id': ["in"],
@@ -43,7 +45,6 @@ class UserViewSet(viewsets.ModelViewSet):
             self.permission_classes = (permissions.AllowAny,)
 
         return super(UserViewSet, self).get_permissions()
-
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -63,10 +64,12 @@ class CurrentUserView(APIView):
 
         return Response(result)
 
+
 class ConfigurationsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Configuration.objects.all()
     serializer_class = ConfigurationSerializer
     permission_classes = []
+
 
 class TranslationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Translation.objects.all()
@@ -74,6 +77,17 @@ class TranslationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = TranslationSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = {
-        'language': ["exact"], 
-        'language_code': ["exact"], 
+        'language': ["exact"],
+        'language_code': ["exact"],
+    }
+
+
+class QuestionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Question.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = QuestionSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = {
+        'id': ["in", "exact"],
+        'question_type': ["in", "exact"],
     }
