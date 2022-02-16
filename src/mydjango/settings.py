@@ -42,7 +42,7 @@ SECRET_KEY = 's_-aro!sw@)bob$tojdq!s61$+3s22y=dbe!b5y3!p4ch&y3k#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['web', 'localhost', '127.0.0.1', 'lvh.me']
+ALLOWED_HOSTS = ['web', 'localhost', '127.0.0.1', 'lvh.me', 'thawing-wildwood-49356.herokuapp.com']
 
 
 # Application definition
