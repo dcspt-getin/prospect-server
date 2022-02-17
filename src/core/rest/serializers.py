@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
-from core.models import Configuration, Question, QuestionOption, Translation
+from core.models import Configuration, GroupQuestions, Question, QuestionOption, Translation
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenObtainSerializer
 from rest_framework import exceptions
 from django.utils.translation import gettext_lazy as _
@@ -92,6 +92,17 @@ class TranslationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'language', 'language_code', 'translations']
 
 
+class GroupQuestionSerializer(serializers.ModelSerializer):
+    parent = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = GroupQuestions
+        fields = ['id', 'name', 'description', 'parent']
+
+    def get_related_field(self, model_field):
+        return GroupQuestionSerializer()
+
+
 class QuestionOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionOption
@@ -100,8 +111,9 @@ class QuestionOptionSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     options = QuestionOptionSerializer(many=True, read_only=True)
+    group = GroupQuestionSerializer(read_only=True)
 
     class Meta:
         model = Question
-        fields = ['id', 'key', 'title', 'description', 'image', 'image_url', 'question_type',
-                  'default_value', 'input_type', 'multiple_selection_type', 'status', 'options']
+        fields = ['id', 'key', 'title', 'group', 'description', 'description_image', 'image_url', 'question_type',
+                  'default_value', 'value_min', 'value_max', 'input_type', 'multiple_selection_type', 'status', 'options']

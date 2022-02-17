@@ -4,12 +4,13 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 # from tagging.fields import TagField
+from filer.fields.image import FilerImageField
 
 ACTIVE = 'ACTIVE'
 NOT_ACTIVE = 'NOT_ACTIVE'
 STATUS_CHOICES = [
-    (ACTIVE, 'Ativada'),
-    (NOT_ACTIVE, 'Desativada'),
+    (ACTIVE, 'Ativa'),
+    (NOT_ACTIVE, 'Desativa'),
 ]
 
 QUESTION_TYPE_CHOICES = [
@@ -47,11 +48,29 @@ class Translation(models.Model):
     translations = models.JSONField(blank=True, null=True)
 
 
+class GroupQuestions(models.Model):
+    parent = models.ForeignKey(
+        'self', on_delete=models.CASCADE, blank=True, null=True)
+
+    name = models.CharField(max_length=256, blank=False, null=False)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        permissions = ()
+
+
 class Question(models.Model):
+    group = models.ForeignKey(
+        GroupQuestions, on_delete=models.CASCADE, blank=True, null=True)
+
     key = models.CharField(max_length=60, blank=True, null=True)
     title = models.CharField(max_length=256, blank=False, null=False)
     description = models.CharField(max_length=256, blank=True, null=True)
-    image = models.FileField(blank=True, null=True)
+    description_image = FilerImageField(blank=True, null=True,
+                                        related_name="question_image", on_delete=models.CASCADE)
     image_url = models.CharField(max_length=60, blank=True)
     question_type = models.CharField(
         max_length=60,
@@ -78,6 +97,8 @@ class Question(models.Model):
         choices=STATUS_CHOICES,
         default=ACTIVE,
     )
+    value_min = models.CharField(max_length=60, blank=True, null=True)
+    value_max = models.CharField(max_length=60, blank=True, null=True)
 
     def __str__(self):
         return self.title

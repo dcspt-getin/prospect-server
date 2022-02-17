@@ -7,8 +7,8 @@ from rest_framework_simplejwt.views import TokenViewBase
 from django_filters import rest_framework as filters
 from rest_framework.permissions import DjangoModelPermissions
 
-from .serializers import QuestionSerializer, TranslationSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer
-from core.models import Configuration, Question, Translation
+from .serializers import QuestionSerializer, TranslationSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer
+from core.models import Configuration, GroupQuestions, Question, Translation
 
 
 class CustomDjangoModelPermissions(DjangoModelPermissions):
@@ -80,6 +80,17 @@ class TranslationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         'language': ["exact"],
         'language_code': ["exact"],
     }
+
+
+class GroupQuestionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = GroupQuestions.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = GroupQuestionSerializer
+    # filter_backends = (filters.DjangoFilterBackend,)
+    # filter_fields = {
+    #     'id': ["in", "exact"],
+    #     'question_type': ["in", "exact"],
+    # }
 
 
 class QuestionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

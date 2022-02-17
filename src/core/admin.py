@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Permission
-from .models import Translation, Configuration, Question, QuestionOption, UserProfile
+from .models import Translation, Configuration, Question, QuestionOption, UserProfile, GroupQuestions
 from django.template.response import TemplateResponse
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
@@ -101,6 +101,14 @@ class TranslationAdmin(admin.ModelAdmin):
     }
 
 
+@admin.register(GroupQuestions)
+class GroupQuestionsAdmin(nested_admin.NestedModelAdmin):
+    readonly_fields = ('id',)
+    fields = ('id', 'parent', 'name', 'description')
+    list_display = ('id', 'name', 'parent')
+    list_filter = ('parent',)
+
+
 class QuestionOptionInline(nested_admin.NestedTabularInline):
     model = QuestionOption
     sortable_field_name = "row_order"
@@ -111,9 +119,10 @@ class QuestionOptionInline(nested_admin.NestedTabularInline):
 @admin.register(Question)
 class QuestionAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id',)
-    fields = ('id', 'key', 'title', 'description', 'image', 'image_url', 'question_type',
-              'default_value', 'input_type', 'multiple_selection_type', 'status')
-    list_display = ('id', 'title', 'question_type', 'status')
+    fields = ('id', 'key', 'group', 'title', 'description', 'description_image', 'image_url', 'question_type', 'input_type',
+              'default_value', 'value_min', 'value_max', 'multiple_selection_type', 'status')
+    list_display = ('id', 'title', 'question_type', 'status', 'group')
+    list_filter = ('group', 'status', 'question_type')
     inlines = [QuestionOptionInline]
 
 
