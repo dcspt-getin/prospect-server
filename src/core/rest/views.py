@@ -7,8 +7,8 @@ from rest_framework_simplejwt.views import TokenViewBase
 from django_filters import rest_framework as filters
 from rest_framework.permissions import DjangoModelPermissions
 
-from .serializers import QuestionSerializer, TranslationSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer
-from core.models import Configuration, GroupQuestions, Question, Translation
+from .serializers import QuestionSerializer, TranslationSerializer, UserProfileSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer
+from core.models import Configuration, GroupQuestions, Question, Translation, UserProfile
 
 
 class CustomDjangoModelPermissions(DjangoModelPermissions):
@@ -102,3 +102,18 @@ class QuestionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         'id': ["in", "exact"],
         'question_type': ["in", "exact"],
     }
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.validated_data['user'] = self.request.user
+        return super(UserProfileViewSet, self).perform_create(serializer)
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return self.queryset
+        return self.queryset.filter(user=self.request.user)

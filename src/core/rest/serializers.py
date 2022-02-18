@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
-from core.models import Configuration, GroupQuestions, Question, QuestionOption, Translation
+from core.models import Configuration, GroupQuestions, Question, QuestionOption, Translation, UserProfile
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenObtainSerializer
 from rest_framework import exceptions
 from django.utils.translation import gettext_lazy as _
@@ -80,6 +80,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
 
+class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'created_at', 'updated_at',
+                  'user_id', 'profile_data', 'status']
+
+
 class ConfigurationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Configuration
@@ -112,6 +119,7 @@ class QuestionOptionSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     options = QuestionOptionSerializer(many=True, read_only=True)
     group = GroupQuestionSerializer(read_only=True)
+    description_image = serializers.ImageField()
 
     class Meta:
         model = Question

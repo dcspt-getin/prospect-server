@@ -26,7 +26,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from core.views import ShowHelloWorld
-from core.rest.views import TranslationViewSet, UserViewSet, CurrentUserView, MyTokenObtainPairView, ConfigurationsViewSet, \
+from core.rest.views import TranslationViewSet, UserProfileViewSet, UserViewSet, CurrentUserView, MyTokenObtainPairView, ConfigurationsViewSet, \
     QuestionsViewSet, GroupQuestionsViewSet
 
 router = routers.DefaultRouter()
@@ -35,6 +35,7 @@ router.register(r'configurations', ConfigurationsViewSet)
 router.register(r'translations', TranslationViewSet)
 router.register(r'questions', QuestionsViewSet)
 router.register(r'groups-questions', GroupQuestionsViewSet)
+router.register(r'profiles', UserProfileViewSet)
 
 
 def trigger_error(request):
