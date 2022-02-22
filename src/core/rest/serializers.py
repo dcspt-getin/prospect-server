@@ -6,6 +6,7 @@ from core.models import Configuration, GroupQuestions, Question, QuestionOption,
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenObtainSerializer
 from rest_framework import exceptions
 from django.utils.translation import gettext_lazy as _
+from django_quill.drf.fields import QuillHtmlField
 
 
 class MyTokenObtainSerializer(TokenObtainPairSerializer, TokenObtainSerializer):
@@ -120,8 +121,9 @@ class QuestionSerializer(serializers.ModelSerializer):
     options = QuestionOptionSerializer(many=True, read_only=True)
     group = GroupQuestionSerializer(read_only=True)
     description_image = serializers.ImageField()
+    description_html = QuillHtmlField()
 
     class Meta:
         model = Question
-        fields = ['id', 'key', 'title', 'group', 'description', 'description_image', 'image_url', 'question_type',
+        fields = ['id', 'key', 'title', 'group', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
                   'default_value', 'value_min', 'value_max', 'input_type', 'multiple_selection_type', 'status', 'options']
