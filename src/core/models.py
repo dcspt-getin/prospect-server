@@ -101,6 +101,8 @@ class Question(models.Model):
     )
     value_min = models.CharField(max_length=60, blank=True, null=True)
     value_max = models.CharField(max_length=60, blank=True, null=True)
+    value_interval = models.CharField(
+        max_length=60, blank=True, null=True, default='1')
 
     def __str__(self):
         return self.title

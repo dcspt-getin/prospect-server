@@ -120,7 +120,7 @@ class QuestionOptionInline(nested_admin.NestedTabularInline):
 class QuestionAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id',)
     fields = ('id', 'key', 'group', 'title', 'description', 'description_html', 'description_image', 'image_url', 'question_type', 'input_type',
-              'default_value', 'value_min', 'value_max', 'multiple_selection_type', 'status')
+              'default_value', 'value_min', 'value_max', 'value_interval', 'multiple_selection_type', 'status')
     list_display = ('id', 'title', 'question_type', 'status', 'group')
     list_filter = ('group', 'status', 'question_type')
     inlines = [QuestionOptionInline]

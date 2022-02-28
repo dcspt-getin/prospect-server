@@ -126,4 +126,4 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ['id', 'key', 'title', 'group', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
-                  'default_value', 'value_min', 'value_max', 'input_type', 'multiple_selection_type', 'status', 'options']
+                  'default_value', 'value_min', 'value_max', 'value_interval', 'input_type', 'multiple_selection_type', 'status', 'options']
