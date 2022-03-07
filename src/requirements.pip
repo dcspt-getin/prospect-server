@@ -11,7 +11,7 @@ django-cors-headers==3.7.0
 django-dbbackup==3.3.0
 django-filter==2.4.0
 django-filer==2.0.2
-django-quill-editor==0.1.40
+django-quill-editor @ https://github.com/nmsilva/django-quill-editor/archive/refs/heads/master.zip
 django-import-export==2.5.0
 django-json-widget==1.1.1
 django-nested-admin==3.4.0

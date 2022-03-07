@@ -67,8 +67,9 @@ class Question(models.Model):
     group = models.ForeignKey(
         GroupQuestions, on_delete=models.CASCADE, blank=True, null=True)
 
+    rank = models.IntegerField(blank=True, null=True)
     key = models.CharField(max_length=60, blank=True, null=True)
-    title = models.CharField(max_length=256, blank=False, null=False)
+    title = models.CharField(max_length=256, blank=True, null=True)
     description = models.CharField(max_length=256, blank=True, null=True)
     description_html = QuillField(blank=True, null=True)
     description_image = FilerImageField(blank=True, null=True,
@@ -105,10 +106,11 @@ class Question(models.Model):
         max_length=60, blank=True, null=True, default='1')
 
     def __str__(self):
-        return self.title
+        return self.title or ''
 
     class Meta:
         permissions = ()
+        ordering = ['rank', '-id']
 
 
 class QuestionOption(models.Model):
