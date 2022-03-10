@@ -32,6 +32,10 @@ MULTIPLE_SELECTION_TYPE_CHOICES = [
 ]
 
 
+def input_label_default_value():
+    return {"content": "", "position": "right"}
+
+
 class Configuration(models.Model):
     key = models.CharField(max_length=60, blank=False, unique=True, null=False)
     value = models.CharField(max_length=256, blank=True)
@@ -66,6 +70,8 @@ class GroupQuestions(models.Model):
 class Question(models.Model):
     group = models.ForeignKey(
         GroupQuestions, on_delete=models.CASCADE, blank=True, null=True)
+    parent_question = models.ForeignKey(
+        'self', on_delete=models.CASCADE, blank=True, null=True)
 
     rank = models.IntegerField(blank=True, null=True)
     key = models.CharField(max_length=60, blank=True, null=True)
@@ -83,12 +89,16 @@ class Question(models.Model):
         null=False
     )
     default_value = models.CharField(max_length=256, blank=True)
+    correct_value = models.CharField(max_length=256, blank=True)
     input_type = models.CharField(
         max_length=30,
         choices=INPUT_TYPE_CHOICES,
         default=None,
         blank=True
     )
+    input_size = models.CharField(max_length=56, blank=True, default="16")
+    input_label = models.JSONField(
+        blank=True, null=True, default=input_label_default_value)
     multiple_selection_type = models.CharField(
         max_length=30,
         choices=MULTIPLE_SELECTION_TYPE_CHOICES,
@@ -106,7 +116,10 @@ class Question(models.Model):
         max_length=60, blank=True, null=True, default='1')
 
     def __str__(self):
-        return self.title or ''
+        return "%s - %s" % (self.id, self.key)
+
+    def get_children(self):
+        return Question.objects.filter(parent_question=self)
 
     class Meta:
         permissions = ()

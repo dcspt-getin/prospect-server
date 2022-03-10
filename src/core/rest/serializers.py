@@ -122,8 +122,16 @@ class QuestionSerializer(serializers.ModelSerializer):
     group = GroupQuestionSerializer(read_only=True)
     description_image = serializers.ImageField()
     description_html = QuillHtmlField()
+    parent_question = serializers.PrimaryKeyRelatedField(read_only=True)
+    children = serializers.SerializerMethodField()
+
+    def get_children(self, obj):
+        serializer = self.__class__(
+            obj.get_children(), many=True, context=self.context)
+        return serializer.data
 
     class Meta:
         model = Question
-        fields = ['id', 'key', 'rank', 'title', 'group', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
-                  'default_value', 'value_min', 'value_max', 'value_interval', 'input_type', 'multiple_selection_type', 'status', 'options']
+        fields = ['id', 'key', 'rank', 'title', 'group', 'parent_question', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
+                  'input_size', 'input_label', 'correct_value', 'default_value', 'value_min', 'value_max', 'value_interval', 'input_type', 'multiple_selection_type',
+                  'status', 'options', 'children']
