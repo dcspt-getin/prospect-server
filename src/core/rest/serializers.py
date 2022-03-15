@@ -105,7 +105,8 @@ class GroupQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupQuestions
-        fields = ['id', 'name', 'description', 'parent']
+        fields = ['id', 'name', 'description',
+                  'parent', 'visible_after', 'visible_before']
 
     def get_related_field(self, model_field):
         return GroupQuestionSerializer()
@@ -119,11 +120,11 @@ class QuestionOptionSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     options = QuestionOptionSerializer(many=True, read_only=True)
-    group = GroupQuestionSerializer(read_only=True)
     description_image = serializers.ImageField()
     description_html = QuillHtmlField()
     parent_question = serializers.PrimaryKeyRelatedField(read_only=True)
     children = serializers.SerializerMethodField()
+    groups = GroupQuestionSerializer(many=True, read_only=True)
 
     def get_children(self, obj):
         serializer = self.__class__(
@@ -132,6 +133,6 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ['id', 'key', 'rank', 'title', 'group', 'parent_question', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
+        fields = ['id', 'key', 'rank', 'title', 'groups', 'parent_question', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
                   'input_size', 'input_label', 'correct_value', 'default_value', 'value_min', 'value_max', 'value_interval', 'input_type', 'multiple_selection_type',
                   'status', 'options', 'children']

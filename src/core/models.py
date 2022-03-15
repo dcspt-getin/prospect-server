@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 # from tagging.fields import TagField
@@ -59,6 +59,8 @@ class GroupQuestions(models.Model):
 
     name = models.CharField(max_length=256, blank=False, null=False)
     description = models.TextField(blank=True, null=True)
+    visible_after = models.DateTimeField(blank=True, null=True)
+    visible_before = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -68,12 +70,11 @@ class GroupQuestions(models.Model):
 
 
 class Question(models.Model):
-    group = models.ForeignKey(
-        GroupQuestions, on_delete=models.CASCADE, blank=True, null=True)
+    groups = models.ManyToManyField(GroupQuestions)
     parent_question = models.ForeignKey(
         'self', on_delete=models.CASCADE, blank=True, null=True)
 
-    rank = models.IntegerField(blank=True, null=True)
+    rank = models.FloatField(blank=True, null=True)
     key = models.CharField(max_length=60, blank=True, null=True)
     title = models.CharField(max_length=256, blank=True, null=True)
     description = models.CharField(max_length=256, blank=True, null=True)

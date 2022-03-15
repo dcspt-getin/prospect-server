@@ -80,6 +80,7 @@ class PermissionAdmin(admin.ModelAdmin):
 
 UserAdmin.list_display = (
     'username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
+# UserAdmin.list_filter = ('is_staff', 'is_active', 'group')
 
 GroupAdmin.list_display = ('id', 'name')
 
@@ -102,10 +103,11 @@ class TranslationAdmin(admin.ModelAdmin):
 
 
 @admin.register(GroupQuestions)
-class GroupQuestionsAdmin(nested_admin.NestedModelAdmin):
+class GroupQuestionsAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
-    fields = ('id', 'parent', 'name', 'description')
-    list_display = ('id', 'name', 'parent')
+    fields = ('id', 'parent', 'name', 'visible_after',
+              'visible_before', 'description')
+    list_display = ('id', 'name', 'parent', 'visible_after', 'visible_before')
     list_filter = ('parent',)
 
 
@@ -119,11 +121,11 @@ class QuestionOptionInline(nested_admin.NestedTabularInline):
 @admin.register(Question)
 class QuestionAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id',)
-    fields = ('id', 'rank', 'key', 'group', 'parent_question', 'title', 'description', 'description_html', 'description_image', 'image_url', 'question_type', 'input_type',
+    fields = ('id', 'rank', 'key', 'groups', 'parent_question', 'title', 'description', 'description_html', 'description_image', 'image_url', 'question_type', 'input_type',
               'input_size', 'input_label', 'correct_value', 'default_value', 'value_min', 'value_max', 'value_interval', 'multiple_selection_type', 'status')
     list_display = ('id', 'rank', 'key', 'title', 'parent_question',
-                    'question_type', 'status', 'group')
-    list_filter = ('group', 'status', 'question_type')
+                    'question_type', 'status')
+    list_filter = ('groups', 'status', 'question_type')
     inlines = [QuestionOptionInline]
 
 
