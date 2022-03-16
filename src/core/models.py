@@ -15,6 +15,7 @@ STATUS_CHOICES = [
 ]
 
 QUESTION_TYPE_CHOICES = [
+    ('ONLY_QUESTION_INFO', 'Somente informação'),
     ('MULTIPLE_CHOICE', 'Escolha múltipla'),
     ('SHORT_ANSWER', 'Resposta curta'),
     ('PAIRWISE_COMBINATIONS', 'Combionações par a par'),
@@ -140,6 +141,7 @@ class QuestionOption(models.Model):
 
     class Meta:
         permissions = ()
+        ordering = ['row_order']
 
 
 class UserProfile(models.Model):

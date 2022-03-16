@@ -111,7 +111,7 @@ class GroupQuestionsAdmin(admin.ModelAdmin):
     list_filter = ('parent',)
 
 
-class QuestionOptionInline(nested_admin.NestedTabularInline):
+class QuestionOptionInline(nested_admin.SortableHiddenMixin, nested_admin.NestedTabularInline):
     model = QuestionOption
     sortable_field_name = "row_order"
     fields = ('title', 'description', 'row_order')
