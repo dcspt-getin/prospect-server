@@ -127,6 +127,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
                     'question_type', 'status')
     list_filter = ('groups', 'status', 'question_type')
     inlines = [QuestionOptionInline]
+    save_as = True
 
 
 @admin.register(UserProfile)
