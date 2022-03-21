@@ -57,6 +57,7 @@ class Translation(models.Model):
 class GroupQuestions(models.Model):
     parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, blank=True, null=True)
+    user_group = models.ManyToManyField(Group, blank=True)
 
     name = models.CharField(max_length=256, blank=False, null=False)
     description = models.TextField(blank=True, null=True)

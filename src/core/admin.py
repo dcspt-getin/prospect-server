@@ -105,10 +105,10 @@ class TranslationAdmin(admin.ModelAdmin):
 @admin.register(GroupQuestions)
 class GroupQuestionsAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
-    fields = ('id', 'parent', 'name', 'visible_after',
+    fields = ('id', 'parent', 'user_group', 'name', 'visible_after',
               'visible_before', 'description')
     list_display = ('id', 'name', 'parent', 'visible_after', 'visible_before')
-    list_filter = ('parent',)
+    list_filter = ('parent', 'user_group')
 
 
 class QuestionOptionInline(nested_admin.SortableHiddenMixin, nested_admin.NestedTabularInline):

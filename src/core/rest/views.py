@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenViewBase
 from django_filters import rest_framework as filters
 from rest_framework.permissions import DjangoModelPermissions
+from datetime import datetime
 
 from .serializers import QuestionSerializer, TranslationSerializer, UserProfileSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer
 from core.models import Configuration, GroupQuestions, Question, Translation, UserProfile
@@ -102,6 +103,15 @@ class QuestionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         'id': ["in", "exact"],
         'question_type': ["in", "exact"],
     }
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return self.queryset
+
+        user_questions_groups = GroupQuestions.objects.filter(visible_after__lte=datetime.now(), visible_before__gte=datetime.now(),
+                                                              user_group__in=self.request.user.groups.all())
+
+        return self.queryset.filter(groups__in=user_questions_groups)
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
