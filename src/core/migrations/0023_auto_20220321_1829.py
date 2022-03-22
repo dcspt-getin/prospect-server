@@ -6,7 +6,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0014_remove_group_questions_groups'),
         ('core', '0022_auto_20220315_1211'),
     ]
 
@@ -23,6 +22,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='question',
             name='question_type',
-            field=models.CharField(choices=[('ONLY_QUESTION_INFO', 'Somente informação'), ('MULTIPLE_CHOICE', 'Escolha múltipla'), ('SHORT_ANSWER', 'Resposta curta'), ('PAIRWISE_COMBINATIONS', 'Combionações par a par')], default=None, max_length=60),
+            field=models.CharField(choices=[('ONLY_QUESTION_INFO', 'Somente informação'), ('MULTIPLE_CHOICE', 'Escolha múltipla'), (
+                'SHORT_ANSWER', 'Resposta curta'), ('PAIRWISE_COMBINATIONS', 'Combionações par a par')], default=None, max_length=60),
         ),
     ]
