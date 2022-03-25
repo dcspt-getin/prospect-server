@@ -122,7 +122,7 @@ class QuestionOptionInline(nested_admin.SortableHiddenMixin, nested_admin.Nested
 class QuestionAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id',)
     fields = ('id', 'rank', 'key', 'groups', 'parent_question', 'title', 'description', 'description_html', 'description_image', 'image_url', 'question_type', 'input_type',
-              'input_size', 'input_label', 'correct_value', 'default_value', 'value_min', 'value_max', 'value_interval', 'multiple_selection_type', 'status')
+              'input_size', 'input_label', 'correct_value', 'default_value', 'value_min', 'value_max', 'value_interval', 'multiple_selection_type', 'show_previous_iteration', 'status')
     list_display = ('id', 'rank', 'key', 'title', 'parent_question',
                     'question_type', 'status')
     list_filter = ('groups', 'status', 'question_type')

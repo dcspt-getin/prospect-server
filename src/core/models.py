@@ -30,6 +30,7 @@ INPUT_TYPE_CHOICES = [
 MULTIPLE_SELECTION_TYPE_CHOICES = [
     ('RADIO', 'Radio'),
     ('SELECT', 'Select'),
+    ('MULTIPLE_VALUES', 'Multiple'),
 ]
 
 
@@ -117,12 +118,13 @@ class Question(models.Model):
     value_max = models.CharField(max_length=60, blank=True, null=True)
     value_interval = models.CharField(
         max_length=60, blank=True, null=True, default='1')
+    show_previous_iteration = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)
 
     def get_children(self):
-        return Question.objects.filter(parent_question=self)
+        return Question.objects.filter(parent_question=self, status=ACTIVE)
 
     class Meta:
         permissions = ()

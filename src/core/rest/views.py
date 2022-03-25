@@ -9,7 +9,7 @@ from rest_framework.permissions import DjangoModelPermissions
 from datetime import datetime
 
 from .serializers import QuestionSerializer, TranslationSerializer, UserProfileSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer
-from core.models import Configuration, GroupQuestions, Question, Translation, UserProfile
+from core.models import ACTIVE, Configuration, GroupQuestions, Question, Translation, UserProfile
 
 
 class CustomDjangoModelPermissions(DjangoModelPermissions):
@@ -111,7 +111,7 @@ class QuestionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         user_questions_groups = GroupQuestions.objects.filter(visible_after__lte=datetime.now(), visible_before__gte=datetime.now(),
                                                               user_group__in=self.request.user.groups.all())
 
-        return self.queryset.filter(groups__in=user_questions_groups)
+        return self.queryset.filter(groups__in=user_questions_groups, status=ACTIVE)
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
