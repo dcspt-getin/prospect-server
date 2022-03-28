@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 # from tagging.fields import TagField
 from filer.fields.image import FilerImageField
-from django_quill.fields import QuillField
+from tinymce.models import HTMLField
 
 ACTIVE = 'ACTIVE'
 NOT_ACTIVE = 'NOT_ACTIVE'
@@ -81,7 +81,7 @@ class Question(models.Model):
     key = models.CharField(max_length=60, blank=True, null=True)
     title = models.CharField(max_length=256, blank=True, null=True)
     description = models.CharField(max_length=256, blank=True, null=True)
-    description_html = QuillField(blank=True, null=True)
+    description_html = HTMLField(blank=True, null=True)
     description_image = FilerImageField(blank=True, null=True,
                                         related_name="question_image", on_delete=models.CASCADE)
     image_url = models.CharField(max_length=60, blank=True)

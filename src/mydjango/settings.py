@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'reversion',
     'nested_admin',
     'django_quill',
+    'tinymce',
     'dbbackup',  # django-dbbackup
 ]
 
@@ -230,6 +231,31 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 }
+
+# TINYMCE_JS_URL = os.path.join(STATIC_URL, "path/to/tiny_mce/tiny_mce.js")
+TINYMCE_JS_URL = '%stinymce/tinymce.min.js' % (STATIC_URL)
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "height": 500,
+    "menubar": False,
+    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
+    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
+    "code,help,wordcount",
+    "toolbar": "undo redo | formatselect | "
+    "bold italic backcolor | alignleft aligncenter "
+    "alignright alignjustify | bullist numlist outdent indent | "
+    "removeformat | help",
+    "toolbar1": "fullscreen preview bold italic underline | fontselect "
+    "fontsizeselect | forecolor backcolor | alignleft alignright |"
+    "aligncenter alignjustify | indent outdent | bullist numlist table | "
+    "| link image media | codesample |",
+    'toolbar2': "visualblocks visualchars | "
+    "charmap hr pagebreak nonbreaking anchor | code |",
+    "contextmenu": "formats | link image",
+    "menubar": True,
+}
+TINYMCE_SPELLCHECKER = True
+# TINYMCE_COMPRESSOR = True
 
 # ---------------- Local Settings ---------------------------------------
 # Put your local settings in mydjango directory to override this settings
