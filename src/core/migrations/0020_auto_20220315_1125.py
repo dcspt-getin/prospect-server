@@ -19,5 +19,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(insert_configurations)
+        migrations.RunPython(insert_configurations, migrations.RunPython.noop)
     ]
