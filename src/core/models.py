@@ -116,6 +116,8 @@ class Question(models.Model):
     )
     value_min = models.CharField(max_length=60, blank=True, null=True)
     value_max = models.CharField(max_length=60, blank=True, null=True)
+    checkbox_min_options = models.IntegerField(blank=True, null=True)
+    checkbox_max_options = models.IntegerField(blank=True, null=True)
     value_interval = models.CharField(
         max_length=60, blank=True, null=True, default='1')
     show_previous_iteration = models.BooleanField(default=False)
