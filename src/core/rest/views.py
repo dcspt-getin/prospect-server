@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
+from rest_framework.decorators import action
 from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -127,3 +128,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser:
             return self.queryset
         return self.queryset.filter(user=self.request.user)
+
+    @action(detail=False, methods=['get'])
+    def results(self, request):
+        serializer = self.get_serializer(self.queryset, many=True)
+
+        return Response(serializer.data)
