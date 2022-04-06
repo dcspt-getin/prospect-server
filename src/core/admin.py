@@ -121,7 +121,7 @@ class TranslationAdmin(admin.ModelAdmin):
 class GroupQuestionsAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     fields = ('id', 'parent', 'user_group', 'name', 'visible_after',
-              'visible_before', 'description')
+              'visible_before', 'is_visible_on_results', 'description')
     list_display = ('id', 'name', 'parent', 'visible_after', 'visible_before')
     list_filter = ('parent', 'user_group')
 

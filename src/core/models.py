@@ -6,6 +6,7 @@ from django.db.models.signals import post_save, pre_save
 # from tagging.fields import TagField
 from filer.fields.image import FilerImageField
 from tinymce.models import HTMLField
+import reversion
 
 ACTIVE = 'ACTIVE'
 NOT_ACTIVE = 'NOT_ACTIVE'
@@ -64,6 +65,7 @@ class GroupQuestions(models.Model):
     description = models.TextField(blank=True, null=True)
     visible_after = models.DateTimeField(blank=True, null=True)
     visible_before = models.DateTimeField(blank=True, null=True)
+    is_visible_on_results = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -149,6 +151,7 @@ class QuestionOption(models.Model):
         ordering = ['row_order']
 
 
+@reversion.register()
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

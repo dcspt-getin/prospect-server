@@ -105,7 +105,7 @@ class GroupQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupQuestions
         fields = ['id', 'name', 'description',
-                  'parent', 'visible_after', 'visible_before']
+                  'parent', 'visible_after', 'visible_before', 'is_visible_on_results']
 
     def get_related_field(self, model_field):
         return GroupQuestionSerializer()
