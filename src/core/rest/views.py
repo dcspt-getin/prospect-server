@@ -8,6 +8,8 @@ from rest_framework_simplejwt.views import TokenViewBase
 from django_filters import rest_framework as filters
 from rest_framework.permissions import DjangoModelPermissions
 from datetime import datetime
+import pandas as pd
+import numpy as np
 
 from .serializers import QuestionSerializer, TranslationSerializer, UserProfileSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer
 from core.models import ACTIVE, Configuration, GroupQuestions, Question, Translation, UserProfile
@@ -71,6 +73,23 @@ class ConfigurationsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Configuration.objects.all()
     serializer_class = ConfigurationSerializer
     permission_classes = []
+
+    @action(detail=False, methods=['post'])
+    def calc_correl(self, request):
+        l = request.data['xarr']
+        M1 = pd.DataFrame(l)
+
+        l2 = request.data['yarr']
+        M2 = pd.DataFrame(l2)
+
+        a1 = M1.to_numpy()
+        a1 = a1.flatten()
+        a2 = M2.to_numpy()
+        a2 = a2.flatten()
+
+        result = np.corrcoef(a1, a2)
+
+        return Response({'result': result[1][0]})
 
 
 class TranslationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
