@@ -4,6 +4,8 @@ from .models import Translation, Configuration, Question, QuestionOption, UserPr
 from django.template.response import TemplateResponse
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
+from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 from import_export.admin import ImportMixin
 from import_export.forms import ImportForm
@@ -78,9 +80,22 @@ class PermissionAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 
-UserAdmin.list_display = (
-    'username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
-# UserAdmin.list_filter = ('is_staff', 'is_active', 'group')
+class UserResource(resources.ModelResource):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email')
+
+
+class UserAdmin(ImportExportModelAdmin):
+    list_display = (
+        'username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
+    # list_filter = ('created_at',)
+    resource_class = UserResource
+    pass
+
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 
 GroupAdmin.list_display = ('id', 'name')
 

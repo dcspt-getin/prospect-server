@@ -131,6 +131,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def results(self, request):
-        serializer = self.get_serializer(self.queryset, many=True)
+        queryset = UserProfile.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)
