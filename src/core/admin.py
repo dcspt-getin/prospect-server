@@ -18,6 +18,9 @@ from openpyxl import load_workbook
 from django_json_widget.widgets import JSONEditorWidget
 from reversion.admin import VersionAdmin
 import nested_admin
+from drfpasswordless.services import TokenService
+from drfpasswordless.models import CallbackToken
+from drfpasswordless.settings import api_settings
 
 
 # def import_action(self, request, import_method, *args, **kwargs):
@@ -86,11 +89,32 @@ class UserResource(resources.ModelResource):
         fields = ('id', 'username', 'first_name', 'last_name', 'email')
 
 
+def send_email(modeladmin, request, queryset):
+    alias_type = 'email'
+    token_type = CallbackToken.TOKEN_TYPE_AUTH
+    email_subject = api_settings.PASSWORDLESS_EMAIL_SUBJECT
+    email_plaintext = api_settings.PASSWORDLESS_EMAIL_PLAINTEXT_MESSAGE
+    email_html = api_settings.PASSWORDLESS_EMAIL_TOKEN_HTML_TEMPLATE_NAME
+    message_payload = {'email_subject': email_subject,
+                       'email_plaintext': email_plaintext,
+                       'email_html': email_html}
+    for user in queryset:
+        TokenService.send_token(
+            user, alias_type, token_type, **message_payload)
+
+
+send_email.short_description = 'Send email for user login'
+
+
 class UserAdmin(ImportExportModelAdmin):
     list_display = (
         'username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
     # list_filter = ('created_at',)
+    readonly_fields = ('id', 'date_joined', 'last_login')
+    fields = ('id', 'username', 'email', 'first_name',
+              'last_name', 'is_staff', 'is_active', 'is_superuser', 'groups', 'date_joined', 'last_login')
     resource_class = UserResource
+    actions = [send_email]
     pass
 
 

@@ -200,8 +200,12 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
         },
+        'drfpasswordless': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        }
         # 'celery': {
         #     'handlers': ['console'],
         #     'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
@@ -262,16 +266,17 @@ TINYMCE_SPELLCHECKER = True
 
 PASSWORDLESS_AUTH = {
     'PASSWORDLESS_AUTH_TYPES': ['EMAIL'],
-    'PASSWORDLESS_EMAIL_NOREPLY_ADDRESS': 'noreply@example.com',
+    'PASSWORDLESS_EMAIL_NOREPLY_ADDRESS': os.environ.get("EMAIL_FROM"),
+    'PASSWORDLESS_TOKEN_EXPIRE_TIME': 60 * 60 * 24,
 }
 
-# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'dragonboatemail@gmail.com'
-EMAIL_HOST_PASSWORD = 'dragonboat2022'
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'dragonboatemail@gmail.com'
+# EMAIL_HOST_PASSWORD = 'dragonboat2022'
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 
 # Toggle sandbox mode (when running in DEBUG mode)

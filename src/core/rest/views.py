@@ -1,3 +1,4 @@
+import math
 from django.contrib.auth.models import User
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
@@ -88,8 +89,12 @@ class ConfigurationsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         a2 = a2.flatten()
 
         result = np.corrcoef(a1, a2)
+        result = result[1][0]
 
-        return Response({'result': result[1][0]})
+        if math.isnan(result):
+            result = 1
+
+        return Response({'result': result})
 
 
 class TranslationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
