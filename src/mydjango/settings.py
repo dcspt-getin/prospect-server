@@ -32,6 +32,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+CLIENT_BASE_URL = os.environ.get("CLIENT_BASE_URL")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -200,9 +201,13 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
         'drfpasswordless': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'core': {
             'handlers': ['console'],
             'level': 'DEBUG',
         }
@@ -234,7 +239,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60 * 24),
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 }
@@ -268,6 +273,11 @@ PASSWORDLESS_AUTH = {
     'PASSWORDLESS_AUTH_TYPES': ['EMAIL'],
     'PASSWORDLESS_EMAIL_NOREPLY_ADDRESS': os.environ.get("EMAIL_FROM"),
     'PASSWORDLESS_TOKEN_EXPIRE_TIME': 60 * 60 * 24,
+    'PASSWORDLESS_AUTH_TOKEN_CREATOR': 'core.utils.create_authentication_token',
+    'PASSWORDLESS_AUTH_PREFIX': 'api/auth/',
+    'PASSWORDLESS_EMAIL_TOKEN_HTML_TEMPLATE_NAME': 'passwordless_token_email.html',
+    'PASSWORDLESS_EMAIL_CALLBACK': 'core.utils.send_email_with_callback_token',
+    'PASSWORDLESS_EMAIL_SUBJECT': 'Login Url'
 }
 
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"

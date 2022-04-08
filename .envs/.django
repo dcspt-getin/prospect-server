@@ -5,3 +5,4 @@ DB_USER=user
 DB_NAME=django_db
 SENDGRID_API_KEY=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
 EMAIL_FROM=dragonboatemail@gmail.com
+CLIENT_BASE_URL=http://localhost:3000
