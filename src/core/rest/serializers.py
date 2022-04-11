@@ -6,6 +6,7 @@ from core.models import Configuration, GroupQuestions, Question, QuestionOption,
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenObtainSerializer
 from rest_framework import exceptions
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 
 class MyTokenObtainSerializer(TokenObtainPairSerializer, TokenObtainSerializer):
@@ -42,6 +43,9 @@ class MyTokenObtainSerializer(TokenObtainPairSerializer, TokenObtainSerializer):
         data = {}
 
         refresh = self.get_token(self.user)
+
+        self.user.last_login = timezone.now()
+        self.user.save(update_fields=["last_login"])
 
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)

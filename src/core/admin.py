@@ -125,7 +125,7 @@ send_email.short_description = 'Send email for user login'
 
 class UserAdmin(ImportExportModelAdmin, UserAdmin):
     # list_filter = ('created_at',)
-    # readonly_fields = ('id', 'date_joined', 'last_login')
+    readonly_fields = ('id', 'date_joined', 'last_login')
     # fields = ('id', 'username', 'email', 'first_name',
     #           'last_name', 'is_staff', 'is_active', 'is_superuser', 'groups', 'date_joined', 'last_login')
     list_display = (
