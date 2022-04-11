@@ -4,9 +4,9 @@ from .models import Translation, Configuration, Question, QuestionOption, UserPr
 from django.template.response import TemplateResponse
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from import_export.admin import ImportExportModelAdmin
-from import_export import resources
+from import_export import resources, fields, widgets
 from import_export.admin import ImportMixin
 from import_export.forms import ImportForm
 from import_export.formats import base_formats
@@ -21,6 +21,12 @@ import nested_admin
 from drfpasswordless.services import TokenService
 from drfpasswordless.models import CallbackToken
 from drfpasswordless.settings import api_settings
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.forms import (
+    AdminPasswordChangeForm,
+    UserChangeForm,
+    UserCreationForm,
+)
 
 
 # def import_action(self, request, import_method, *args, **kwargs):
@@ -84,9 +90,20 @@ class PermissionAdmin(admin.ModelAdmin):
 
 
 class UserResource(resources.ModelResource):
+    groups = fields.Field(
+        column_name='group_name',
+        attribute='groups',
+        widget=widgets.ManyToManyWidget(Group, ',', 'name')
+    )
+
+    # def before_import_row(self, row, **kwargs):
+    #     value = row['password']
+    #     row['password'] = make_password(value)
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email')
+        fields = ('id', 'username', 'first_name', 'last_name',
+                  'email', 'group_name')
 
 
 def send_email(modeladmin, request, queryset):
@@ -106,16 +123,54 @@ def send_email(modeladmin, request, queryset):
 send_email.short_description = 'Send email for user login'
 
 
-class UserAdmin(ImportExportModelAdmin):
+class UserAdmin(ImportExportModelAdmin, UserAdmin):
+    # list_filter = ('created_at',)
+    # readonly_fields = ('id', 'date_joined', 'last_login')
+    # fields = ('id', 'username', 'email', 'first_name',
+    #           'last_name', 'is_staff', 'is_active', 'is_superuser', 'groups', 'date_joined', 'last_login')
     list_display = (
         'username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
-    # list_filter = ('created_at',)
-    readonly_fields = ('id', 'date_joined', 'last_login')
-    fields = ('id', 'username', 'email', 'first_name',
-              'last_name', 'is_staff', 'is_active', 'is_superuser', 'groups', 'date_joined', 'last_login')
     resource_class = UserResource
     actions = [send_email]
-    pass
+    add_form_template = "admin/auth/user/add_form.html"
+    change_user_password_template = None
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("username", "password1", "password2"),
+            },
+        ),
+    )
+    form = UserChangeForm
+    add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
+    # list_display = ("username", "email", "first_name", "last_name", "is_staff")
+    list_filter = ("is_staff", "is_superuser", "is_active", "groups")
+    search_fields = ("username", "first_name", "last_name", "email")
+    ordering = ("username",)
+    filter_horizontal = (
+        "groups",
+        "user_permissions",
+    )
 
 
 admin.site.unregister(User)
