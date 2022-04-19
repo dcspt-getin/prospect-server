@@ -6,6 +6,7 @@ from drfpasswordless.settings import api_settings
 from drfpasswordless.utils import inject_template_context
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
+from django.contrib.auth.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -47,9 +48,17 @@ def send_email_with_callback_token(user, email_token, **kwargs):
             # Inject context if user specifies.
             url = '{0}/login?email={2}&token={1}'.format(
                 settings.CLIENT_BASE_URL, email_token.key, user.email)
-            print(url)
-            context = inject_template_context({'url': url, })
+            password = ''
+
+            if not user.password:
+                password = User.objects.make_random_password()
+                user.set_password(password)
+                user.save()
+
+            context = inject_template_context(
+                {'url': url, 'password': password, })
             html_message = loader.render_to_string(email_html, context,)
+
             send_mail(
                 email_subject,
                 email_plaintext % email_token.key,
