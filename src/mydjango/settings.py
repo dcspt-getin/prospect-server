@@ -44,7 +44,7 @@ SECRET_KEY = 's_-aro!sw@)bob$tojdq!s61$+3s22y=dbe!b5y3!p4ch&y3k#'
 DEBUG = True
 
 ALLOWED_HOSTS = ['web', 'localhost', '127.0.0.1',
-                 'lvh.me', 'thawing-wildwood-49356.herokuapp.com']
+                 'lvh.me', 'thawing-wildwood-49356.herokuapp.com', 'protcapp.tk']
 
 
 # Application definition
@@ -177,11 +177,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static-backend/'
 MEDIA_URL = '/media/'
 
 # CELERY_BROKER_URL = 'redis://redis:6379/0'
