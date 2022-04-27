@@ -44,7 +44,7 @@ SECRET_KEY = 's_-aro!sw@)bob$tojdq!s61$+3s22y=dbe!b5y3!p4ch&y3k#'
 DEBUG = True
 
 ALLOWED_HOSTS = ['web', 'localhost', '127.0.0.1',
-                 'lvh.me', 'thawing-wildwood-49356.herokuapp.com', 'protcapp.tk']
+                 'lvh.me', 'thawing-wildwood-49356.herokuapp.com', 'protcapp.tk', 'dcspt-drivitup.ua.pt']
 
 
 # Application definition
@@ -180,8 +180,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static-backend/'
-MEDIA_URL = '/media/'
+ADMIN_URL_PREFIX = os.environ.get("ADMIN_URL_PREFIX", '')
+STATIC_URL_PREFIX = os.environ.get("STATIC_URL_PREFIX", '')
+MEDIA_URL_PREFIX = os.environ.get("STATIC_URL_PREFIX", '')
+
+STATIC_URL = STATIC_URL_PREFIX + '/static-backend/'
+MEDIA_URL = MEDIA_URL_PREFIX + '/media/'
 
 # CELERY_BROKER_URL = 'redis://redis:6379/0'
 # CELERY_RESULT_BACKEND = 'redis://redis:6379/0'

@@ -43,7 +43,7 @@ def trigger_error(request):
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^{}admin/'.format(settings.ADMIN_URL_PREFIX), admin.site.urls),
     url(r'^$', ShowHelloWorld.as_view()),
     url(r'^_nested_admin/', include('nested_admin.urls')),
     path('api/', include(router.urls)),

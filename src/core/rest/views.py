@@ -118,6 +118,15 @@ class GroupQuestionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     #     'question_type': ["in", "exact"],
     # }
 
+    @action(detail=False, methods=['get'])
+    def all(self, request):
+        queryset = GroupQuestions.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response({
+            'results': serializer.data,
+        })
+
 
 class QuestionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Question.objects.all()
@@ -137,6 +146,15 @@ class QuestionsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
                                                               user_group__in=self.request.user.groups.all())
 
         return self.queryset.filter(groups__in=user_questions_groups, status=ACTIVE)
+
+    @action(detail=False, methods=['get'])
+    def all(self, request):
+        queryset = Question.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response({
+            'results': serializer.data,
+        })
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
