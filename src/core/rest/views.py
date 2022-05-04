@@ -11,6 +11,7 @@ from rest_framework.permissions import DjangoModelPermissions
 from datetime import datetime
 import pandas as pd
 import numpy as np
+from django.db.models import Q
 
 from .serializers import QuestionSerializer, TranslationSerializer, UserProfileSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer
 from core.models import ACTIVE, Configuration, GroupQuestions, Question, Translation, UserProfile
@@ -173,7 +174,22 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def results(self, request):
+        group = request.query_params.get('group', None)
+        questions_groups = GroupQuestions.objects.filter(id=group)
+        questions = Question.objects.filter(groups__in=questions_groups)
         queryset = UserProfile.objects.all()
+        filters = []
+
+        for question in questions:
+            filters.append(Q(profile_data__has_key=str(question.id)))
+
+        query = filters.pop()
+
+        # Or the Q object with the ones remaining in the list
+        for item in filters:
+            query |= item
+
+        queryset = queryset.filter(query)
         serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)
