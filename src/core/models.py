@@ -20,6 +20,8 @@ QUESTION_TYPE_CHOICES = [
     ('MULTIPLE_CHOICE', 'Escolha múltipla'),
     ('SHORT_ANSWER', 'Resposta curta'),
     ('PAIRWISE_COMBINATIONS', 'Combionações par a par'),
+    ('URBAN_SHAPES', 'Urban Shapes'),
+    ('CITIZEN_PROFILE', 'Citizen Profile'),
 ]
 
 INPUT_TYPE_CHOICES = [

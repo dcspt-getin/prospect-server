@@ -29,6 +29,8 @@ from core.views import ShowHelloWorld
 from core.rest.views import TranslationViewSet, UserProfileViewSet, UserViewSet, CurrentUserView, MyTokenObtainPairView, ConfigurationsViewSet, \
     QuestionsViewSet, GroupQuestionsViewSet
 
+from housearch.rest.views import TerritorialCoverageViewSet, TerritorialUnitViewSet
+
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'configurations', ConfigurationsViewSet)
@@ -36,6 +38,8 @@ router.register(r'translations', TranslationViewSet)
 router.register(r'questions', QuestionsViewSet)
 router.register(r'groups-questions', GroupQuestionsViewSet)
 router.register(r'profiles', UserProfileViewSet)
+router.register(r'territorial-coverage', TerritorialCoverageViewSet)
+router.register(r'territorial-unit', TerritorialUnitViewSet)
 
 
 def trigger_error(request):

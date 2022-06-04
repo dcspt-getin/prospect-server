@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreApp',
+    'housearch.apps.HouSearchApp',
     # 'celery',
     'corsheaders',
     'rest_framework',
