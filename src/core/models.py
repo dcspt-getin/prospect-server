@@ -19,9 +19,11 @@ QUESTION_TYPE_CHOICES = [
     ('ONLY_QUESTION_INFO', 'Somente informação'),
     ('MULTIPLE_CHOICE', 'Escolha múltipla'),
     ('SHORT_ANSWER', 'Resposta curta'),
-    ('PAIRWISE_COMBINATIONS', 'Combionações par a par'),
-    ('URBAN_SHAPES', 'Urban Shapes'),
+    ('PAIRWISE_COMBINATIONS', 'Combinações par a par'),
+    ('IMAGE_PAIRWISE_COMBINATIONS', 'Combinações de imagens par a par'),
     ('CITIZEN_PROFILE', 'Citizen Profile'),
+    ('TERRITORIAL_COVERAGE', 'Escolha de cobertura territorial'),
+    ('GEOLOCATION', 'Escolha de Geolocalização'),
 ]
 
 INPUT_TYPE_CHOICES = [
@@ -125,6 +127,7 @@ class Question(models.Model):
     value_interval = models.CharField(
         max_length=60, blank=True, null=True, default='1')
     show_previous_iteration = models.BooleanField(default=False)
+    is_required = models.BooleanField(default=True)
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)
