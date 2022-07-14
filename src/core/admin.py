@@ -219,7 +219,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
         (None, {
             'fields': ('id', 'rank', 'key', 'status', 'groups',
                        'parent_question', 'title', 'description', 'description_html', 'description_image', 'image_url',
-                       'correct_value', 'is_required', 'question_type'),
+                       'correct_value', 'is_required', 'show_balance', 'question_type'),
         }),
         ('Opções de Resposta Curta', {
             'fields': ('input_type',
@@ -231,6 +231,9 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
         }),
         ('Opções de Combinações par a par', {
             'fields': ('show_previous_iteration',),
+        }),
+        ('Opções de Combinações de imagens par a par', {
+            'fields': ('image_pairwise_type',),
         }),
     )
     list_display = ('id', 'rank', 'key', 'title', 'parent_question',

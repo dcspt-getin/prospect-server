@@ -38,6 +38,11 @@ MULTIPLE_SELECTION_TYPE_CHOICES = [
     ('MULTIPLE_VALUES', 'Multiple'),
 ]
 
+IMAGE_PAIRWISE_COMBINATIONS_TYPES = [
+    ('BINARY_CHOICE', 'Escolha Binária'),
+    ('WEIGHT_BASED_CHOICE', 'Escolha com base em pesos'),
+]
+
 
 def input_label_default_value():
     return {"content": "", "position": "right"}
@@ -120,6 +125,13 @@ class Question(models.Model):
         choices=STATUS_CHOICES,
         default=ACTIVE,
     )
+    image_pairwise_type = models.CharField(
+        max_length=30,
+        choices=IMAGE_PAIRWISE_COMBINATIONS_TYPES,
+        default=None,
+        blank=True,
+        null=True
+    )
     value_min = models.CharField(max_length=60, blank=True, null=True)
     value_max = models.CharField(max_length=60, blank=True, null=True)
     checkbox_min_options = models.IntegerField(blank=True, null=True)
@@ -128,6 +140,8 @@ class Question(models.Model):
         max_length=60, blank=True, null=True, default='1')
     show_previous_iteration = models.BooleanField(default=False)
     is_required = models.BooleanField(default=True)
+    show_balance = models.BooleanField(
+        default=True, verbose_name="Show balance (If applicable)")
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)
