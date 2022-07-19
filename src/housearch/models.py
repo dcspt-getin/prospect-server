@@ -66,7 +66,7 @@ class TerritorialUnit(models.Model):
 class TerritorialUnitImage(models.Model):
     name = models.CharField(max_length=60, blank=True)
     image = models.FileField(blank=True, null=True)
-    image_url = models.CharField(max_length=60, blank=True)
+    image_url = models.CharField(max_length=256, blank=True)
     geometry = models.JSONField(blank=True, null=True)
     territorial_unit = models.ForeignKey(
         TerritorialUnit, on_delete=models.CASCADE, related_name='images', default=None)

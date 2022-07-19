@@ -237,10 +237,13 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
         }),
     )
     list_display = ('id', 'rank', 'key', 'title', 'parent_question',
-                    'question_type', 'status')
+                    'question_type', 'question_groups', 'status')
     list_filter = ('groups', 'status', 'question_type')
     inlines = [QuestionOptionInline]
     save_as = True
+
+    def question_groups(self, obj):
+        return "\n".join([str(p) for p in obj.groups.all()])
 
 
 @admin.register(UserProfile)
