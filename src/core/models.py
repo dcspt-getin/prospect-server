@@ -8,6 +8,8 @@ from filer.fields.image import FilerImageField
 from tinymce.models import HTMLField
 import reversion
 
+DEFAULT_USER_GROUP_KEY = "DEFAULT_USER_GROUP"
+
 ACTIVE = 'ACTIVE'
 NOT_ACTIVE = 'NOT_ACTIVE'
 STATUS_CHOICES = [
@@ -188,6 +190,16 @@ class UserProfile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
+            default_group_configuration = Configuration.objects.get(
+                key=DEFAULT_USER_GROUP_KEY)
+
+            if default_group_configuration and default_group_configuration.value:
+                groups = Group.objects.filter(
+                    pk__in=default_group_configuration.value.split(','))
+
+                for group in groups:
+                    instance.groups.add(group)
+
             UserProfile.objects.create(user=instance)
 
     # @receiver(post_save, sender=User)
