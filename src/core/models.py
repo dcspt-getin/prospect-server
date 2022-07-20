@@ -142,6 +142,8 @@ class Question(models.Model):
     is_required = models.BooleanField(default=True)
     show_balance = models.BooleanField(
         default=True, verbose_name="Show balance (If applicable)")
+    territorial_coverages = models.CharField(
+        max_length=60, blank=True, null=True, verbose_name="Territorial coverages (ids separated by comma)")
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)

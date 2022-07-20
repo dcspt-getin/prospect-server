@@ -233,7 +233,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
             'fields': ('show_previous_iteration',),
         }),
         ('Opções de Combinações de imagens par a par', {
-            'fields': ('image_pairwise_type',),
+            'fields': ('image_pairwise_type', 'territorial_coverages'),
         }),
     )
     list_display = ('id', 'rank', 'key', 'title', 'parent_question',
