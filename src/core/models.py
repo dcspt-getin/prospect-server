@@ -59,12 +59,17 @@ class Configuration(models.Model):
 
     class Meta:
         permissions = ()
+        verbose_name = 'Global Configuration'
+        verbose_name_plural = 'Global Configurations'
 
 
 class Translation(models.Model):
     language = models.CharField(max_length=256, blank=False, null=False)
     language_code = models.CharField(max_length=256, blank=False, null=False)
     translations = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return self.language
 
 
 class GroupQuestions(models.Model):
@@ -83,6 +88,8 @@ class GroupQuestions(models.Model):
 
     class Meta:
         permissions = ()
+        verbose_name = 'Group of Questions'
+        verbose_name_plural = 'Groups of Questions'
 
 
 class Question(models.Model):
@@ -90,6 +97,8 @@ class Question(models.Model):
     parent_question = models.ForeignKey(
         'self', on_delete=models.CASCADE, blank=True, null=True)
 
+    language = models.ForeignKey(
+        Translation, on_delete=models.CASCADE, blank=True, null=True)
     rank = models.FloatField(blank=True, null=True)
     key = models.CharField(max_length=60, blank=True, null=True)
     title = models.CharField(max_length=256, blank=True, null=True)
@@ -146,6 +155,8 @@ class Question(models.Model):
         default=True, verbose_name="Show balance (If applicable)")
     territorial_coverages = models.CharField(
         max_length=60, blank=True, null=True, verbose_name="Territorial coverages (ids separated by comma)")
+    use_google_street_images = models.BooleanField(
+        default=True, verbose_name="Show Google Street Images")
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)
@@ -186,6 +197,11 @@ class UserProfile(models.Model):
         choices=STATUS_CHOICES,
         default=ACTIVE,
     )
+
+    class Meta:
+        permissions = ()
+        verbose_name = 'User Profile'
+        verbose_name_plural = 'User Profiles'
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):

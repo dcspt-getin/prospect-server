@@ -103,6 +103,12 @@ class TranslationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'language', 'language_code', 'translations']
 
 
+class QuestionLanguageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Translation
+        fields = ['id', 'language', 'language_code']
+
+
 class GroupQuestionSerializer(serializers.ModelSerializer):
     parent = serializers.PrimaryKeyRelatedField(read_only=True)
 
@@ -133,6 +139,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     parent_question = serializers.PrimaryKeyRelatedField(read_only=True)
     children = serializers.SerializerMethodField()
     groups = GroupQuestionSerializer(many=True, read_only=True)
+    language = QuestionLanguageSerializer(read_only=True)
 
     def get_children(self, obj):
         serializer = self.__class__(
@@ -141,7 +148,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ['id', 'key', 'rank', 'title', 'groups', 'parent_question', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
+        fields = ['id', 'key', 'language', 'rank', 'title', 'groups', 'parent_question', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
                   'input_size', 'input_label', 'correct_value', 'default_value', 'value_min', 'value_max', 'value_interval', 'checkbox_min_options', 'checkbox_max_options',
                   'input_type', 'multiple_selection_type', 'status', 'options', 'children', 'show_previous_iteration', 'is_required', 'image_pairwise_type', 'show_balance',
-                  'territorial_coverages']
+                  'territorial_coverages', 'use_google_street_images']

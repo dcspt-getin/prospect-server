@@ -164,7 +164,8 @@ class UserAdmin(ImportExportModelAdmin, UserAdmin):
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
     # list_display = ("username", "email", "first_name", "last_name", "is_staff")
-    list_filter = ("is_staff", "is_superuser", "is_active", "groups")
+    list_filter = ("is_staff", "is_superuser",
+                   "is_active", "groups")
     search_fields = ("username", "first_name", "last_name", "email")
     ordering = ("username",)
     filter_horizontal = (
@@ -217,28 +218,31 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
     readonly_fields = ('id',)
     fieldsets = (
         (None, {
-            'fields': ('id', 'rank', 'key', 'status', 'groups',
+            'fields': ('id', 'rank', 'key', 'language', 'status', 'groups',
                        'parent_question', 'title', 'description', 'description_html', 'description_image', 'image_url',
                        'correct_value', 'is_required', 'show_balance', 'question_type'),
         }),
         ('Opções de Resposta Curta', {
             'fields': ('input_type',
                        'input_size', 'input_label', 'default_value', 'value_interval', 'value_min', 'value_max'),
-            # 'classes': ('collapse',),
+            'classes': ('collapse',),
         }),
         ('Opções de Escolha multipla', {
             'fields': ('multiple_selection_type', 'checkbox_min_options', 'checkbox_max_options'),
+            'classes': ('collapse',),
         }),
         ('Opções de Combinações par a par', {
             'fields': ('show_previous_iteration',),
+            'classes': ('collapse',),
         }),
         ('Opções de Combinações de imagens par a par', {
-            'fields': ('image_pairwise_type', 'territorial_coverages'),
+            'fields': ('image_pairwise_type', 'territorial_coverages', 'use_google_street_images'),
+            'classes': ('collapse',),
         }),
     )
     list_display = ('id', 'rank', 'key', 'title', 'parent_question',
-                    'question_type', 'question_groups', 'status')
-    list_filter = ('groups', 'status', 'question_type')
+                    'question_type', 'question_groups', 'status', 'language')
+    list_filter = ('groups', 'status', 'question_type', 'language')
     inlines = [QuestionOptionInline]
     save_as = True
 

@@ -33,6 +33,8 @@ class TerritorialCoverage(models.Model):
 
     class Meta:
         permissions = ()
+        verbose_name = 'Territorial Coverage'
+        verbose_name_plural = 'Territorial Coverages'
 
 
 class TerritorialUnit(models.Model):
@@ -61,6 +63,8 @@ class TerritorialUnit(models.Model):
 
     class Meta:
         permissions = ()
+        verbose_name = 'Territorial Unit'
+        verbose_name_plural = 'Territorial Units'
 
 
 class TerritorialUnitImage(models.Model):
@@ -76,3 +80,5 @@ class TerritorialUnitImage(models.Model):
 
     class Meta:
         permissions = ()
+        verbose_name = 'Territorial Unit Image'
+        verbose_name_plural = 'Territorial Unit Images'

@@ -1,7 +1,8 @@
 import json
 from housearch.models import TerritorialCoverage, TerritorialUnit, TerritorialUnitImage
 
-def load_geo_json(data, save_result = False):
+
+def load_geo_json(data, save_result=False):
     all_territorial = TerritorialCoverage.objects.all()
     all_municods = []
     loaded_data = []
@@ -12,8 +13,8 @@ def load_geo_json(data, save_result = False):
     print(all_municods)
 
     for feature in data['features']:
-    #   if 'lhavo' in feature['properties']['FREG18_la']:
-    #       print(feature['properties']['MUNICOD'])
+        #   if 'lhavo' in feature['properties']['FREG18_la']:
+        # print(feature['properties']['MUNICOD'])
         if feature['properties']['MUNICOD'] in all_municods:
 
             loaded_data.append(feature)
@@ -22,13 +23,16 @@ def load_geo_json(data, save_result = False):
             name = feature['properties']['name'] if 'name' in feature['properties'] else tucode
 
             print('tucode')
-            print (tucode)
+            print(tucode)
 
-            territorial = TerritorialCoverage.objects.get(municod__exact=feature['properties']['MUNICOD'])
-            territorial_units = TerritorialUnit.objects.filter(territorial_coverage_id=territorial.id, name__exact=name)
+            territorial = TerritorialCoverage.objects.get(
+                municod__exact=feature['properties']['MUNICOD'])
+            territorial_units = TerritorialUnit.objects.filter(
+                territorial_coverage_id=territorial.id, name__exact=name)
 
             if territorial_units.count() > 0:
-                territorial_unit = TerritorialUnit.objects.get(territorial_coverage_id=territorial.id, name__exact=name)
+                territorial_unit = TerritorialUnit.objects.get(
+                    territorial_coverage_id=territorial.id, name__exact=name)
                 territorial_unit.properties = feature['properties']
                 territorial_unit.geometry = feature
                 territorial_unit.save()
@@ -43,7 +47,7 @@ def load_geo_json(data, save_result = False):
 
     if save_result:
         with open('media/loaded_geo_data.json', "w") as out:
-            json.dump({ 'features': loaded_data }, out)
+            json.dump({'features': loaded_data}, out)
 
 
 def import_territorial_unit_images_json(data):
@@ -53,7 +57,7 @@ def import_territorial_unit_images_json(data):
         name = image['IMG_name'] if 'IMG_name' in image else tucode
         image_url = image['Image_url'] if 'Image_url' in image else ''
         territorial_unit = TerritorialUnit.objects.get(tucode__exact=tucode)
-        
+
         if territorial_unit:
             TerritorialUnitImage.objects.update_or_create(
                 territorial_unit=territorial_unit,
