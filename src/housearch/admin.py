@@ -1,5 +1,9 @@
+import os
 from django.contrib import admin
 from django.contrib.auth.models import Permission
+from PIL import Image
+
+from core.models import Configuration
 from .models import TerritorialCoverage, TerritorialUnitImage, TerritorialUnit
 from django.template.response import TemplateResponse
 from django.core.exceptions import PermissionDenied
@@ -13,8 +17,12 @@ from django.http import HttpResponse
 import json
 from openpyxl import load_workbook
 from django_json_widget.widgets import JSONEditorWidget
+import streetview
+from operator import itemgetter
 
 from .helpers import load_geo_json, import_territorial_unit_images_json
+
+GOOGLE_API_KEY = "GOOGLE_API_KEY"
 
 
 def import_action(self, request, import_method, *args, **kwargs):
@@ -119,10 +127,48 @@ class TerritorialUnitImageResource(resources.ModelResource):
         model = TerritorialUnitImage
 
 
+def load_google_images(modeladmin, request, queryset):
+    headings = [0, 120, 240]
+    google_api_key = Configuration.objects.get(
+        key=GOOGLE_API_KEY)
+    for tu_image in queryset:
+        panoids = streetview.panoids(
+            lat=tu_image.geometry['lat'], lon=tu_image.geometry['lng'])
+
+        latest = sorted(panoids, key=lambda item: item.get(
+            'year', 0), reverse=True)[0]
+
+        # creates a new empty image, RGB mode, and size 444 by 95
+        new_im = Image.new('RGB', (1920, 600))
+        x_offset = 0
+        downloaded_images = []
+
+        for heading in headings:
+            image = streetview.api_download(
+                latest['panoid'], heading, './media/streetview', google_api_key.value, 640, 640, 120)
+
+            im = Image.open(image)
+            new_im.paste(im, (x_offset, 0))
+            x_offset += 640
+            downloaded_images.append(image)
+
+        new_im.save('./media/streetview/{}.jpg'.format(latest['panoid']))
+
+        tu_image.image.name = 'streetview/{}.jpg'.format(latest['panoid'])
+        tu_image.save()
+
+        for image in downloaded_images:
+            os.remove(image)
+
+
+load_google_images.short_description = 'Load google street images'
+
+
 @admin.register(TerritorialUnitImage)
 class TerritorialUnitImageAdmin(ImportTerritorialUnitImageAdmin):
     resource_class = TerritorialUnitImageResource
     readonly_fields = ('id',)
+    actions = [load_google_images]
     fields = ('id', 'name', 'image', 'image_url',
               'geometry', 'territorial_unit')
     list_display = ('name',)

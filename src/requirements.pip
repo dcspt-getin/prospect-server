@@ -37,6 +37,7 @@ sendgrid==6.9.7
 sentry-sdk==1.4.3
 six==1.15.0
 sqlparse==0.4.1
+streetview @ git+https://github.com/robolyst/streetview@100d77b68085ec2a0972265abcd4c96387b69041
 typing-extensions==3.7.4.3
 vine==5.0.0
 wcwidth==0.2.5
