@@ -183,7 +183,7 @@ USE_TZ = True
 
 ADMIN_URL_PREFIX = os.environ.get("ADMIN_URL_PREFIX", '')
 STATIC_URL_PREFIX = os.environ.get("STATIC_URL_PREFIX", '')
-MEDIA_URL_PREFIX = os.environ.get("STATIC_URL_PREFIX", '')
+MEDIA_URL_PREFIX = os.environ.get("MEDIA_URL_PREFIX", '')
 
 STATIC_URL = STATIC_URL_PREFIX + '/static-backend/'
 MEDIA_URL = MEDIA_URL_PREFIX + '/media/'
