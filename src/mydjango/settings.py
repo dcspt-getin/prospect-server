@@ -182,11 +182,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 ADMIN_URL_PREFIX = os.environ.get("ADMIN_URL_PREFIX", '')
+ADMIN_BASE_URL = os.environ.get("ADMIN_BASE_URL", '')
 STATIC_URL_PREFIX = os.environ.get("STATIC_URL_PREFIX", '')
 MEDIA_URL_PREFIX = os.environ.get("MEDIA_URL_PREFIX", '')
 
-STATIC_URL = STATIC_URL_PREFIX + '/static-backend/'
-MEDIA_URL = MEDIA_URL_PREFIX + '/media/'
+STATIC_URL = ADMIN_BASE_URL + STATIC_URL_PREFIX + '/static-backend/'
+MEDIA_URL = ADMIN_BASE_URL + MEDIA_URL_PREFIX + '/media/'
+STATIC_URL_PATTERN = STATIC_URL_PREFIX + '/static-backend/'
+MEDIA_URL_PATTERN = STATIC_URL_PREFIX + '/media/'
 
 # CELERY_BROKER_URL = 'redis://redis:6379/0'
 # CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
