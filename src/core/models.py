@@ -156,7 +156,9 @@ class Question(models.Model):
     territorial_coverages = models.CharField(
         max_length=60, blank=True, null=True, verbose_name="Territorial coverages (ids separated by comma)")
     use_google_street_images = models.BooleanField(
-        default=True, verbose_name="Show Google Street Images")
+        default=False, verbose_name="Show Google Street Images")
+    use_360_image = models.BooleanField(
+        default=False, verbose_name="Show 360 Image")
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)

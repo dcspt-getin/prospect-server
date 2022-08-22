@@ -236,7 +236,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
             'classes': ('collapse',),
         }),
         ('Opções de Combinações de imagens par a par', {
-            'fields': ('image_pairwise_type', 'territorial_coverages', 'use_google_street_images'),
+            'fields': ('image_pairwise_type', 'territorial_coverages', 'use_google_street_images', 'use_360_image'),
             'classes': ('collapse',),
         }),
     )
