@@ -220,7 +220,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
         (None, {
             'fields': ('id', 'rank', 'key', 'language', 'status', 'groups',
                        'parent_question', 'title', 'description', 'description_html', 'description_image', 'image_url',
-                       'correct_value', 'is_required', 'show_balance', 'question_type'),
+                       'correct_value', 'is_required', 'show_balance', 'show_only_on_parent_value', 'question_type'),
         }),
         ('Opções de Resposta Curta', {
             'fields': ('input_type',

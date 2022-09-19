@@ -159,6 +159,8 @@ class Question(models.Model):
         default=False, verbose_name="Show Google Street Images")
     use_360_image = models.BooleanField(
         default=False, verbose_name="Show 360 Image")
+    show_only_on_parent_value = models.CharField(
+        max_length=60, blank=True, null=True, verbose_name="Show only if parent value is equals (values separated with commas)")
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)
@@ -180,7 +182,7 @@ class QuestionOption(models.Model):
     description = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return "ID - %s" % (self.id)
 
     class Meta:
         permissions = ()
