@@ -44,7 +44,7 @@ SECRET_KEY = 's_-aro!sw@)bob$tojdq!s61$+3s22y=dbe!b5y3!p4ch&y3k#'
 DEBUG = True
 
 ALLOWED_HOSTS = ['web', 'localhost', '127.0.0.1',
-                 'lvh.me', 'thawing-wildwood-49356.herokuapp.com', 'protcapp.tk', 'dcspt-drivitup.ua.pt']
+                 'lvh.me', 'thawing-wildwood-49356.herokuapp.com', 'protcapp.tk', 'dcspt-drivitup.ua.pt', 'dcspt-getin.ua.pt']
 
 
 # Application definition
