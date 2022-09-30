@@ -224,7 +224,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
         }),
         ('Opções de Resposta Curta', {
             'fields': ('input_type',
-                       'input_size', 'input_label', 'default_value', 'value_interval', 'value_min', 'value_max'),
+                       'input_size', 'input_label', 'slider_label', 'default_value', 'value_interval', 'value_min', 'value_max'),
             'classes': ('collapse',),
         }),
         ('Opções de Escolha multipla', {

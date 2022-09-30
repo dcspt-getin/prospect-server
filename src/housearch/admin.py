@@ -135,6 +135,9 @@ def load_google_images(modeladmin, request, queryset):
         panoids = streetview.panoids(
             lat=tu_image.geometry['lat'], lon=tu_image.geometry['lng'])
 
+        if len(panoids) == 0:
+            break
+
         latest = sorted(panoids, key=lambda item: item.get(
             'year', 0), reverse=True)[0]
 

@@ -50,6 +50,10 @@ def input_label_default_value():
     return {"content": "", "position": "right"}
 
 
+def slider_label_default_value():
+    return {"right": "", "left": ""}
+
+
 class Configuration(models.Model):
     key = models.CharField(max_length=60, blank=False, unique=True, null=False)
     value = models.CharField(max_length=256, blank=True)
@@ -161,6 +165,8 @@ class Question(models.Model):
         default=False, verbose_name="Show 360 Image")
     show_only_on_parent_value = models.CharField(
         max_length=60, blank=True, null=True, verbose_name="Show only if parent value is equals (values separated with commas)")
+    slider_label = models.JSONField(
+        blank=True, null=True, default=slider_label_default_value)
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)
