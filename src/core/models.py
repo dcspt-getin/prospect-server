@@ -167,6 +167,8 @@ class Question(models.Model):
         max_length=60, blank=True, null=True, verbose_name="Show only if parent value is equals (values separated with commas)")
     slider_label = models.JSONField(
         blank=True, null=True, default=slider_label_default_value)
+    disabled_after_filled = models.BooleanField(
+        default=True, verbose_name="Disabled after filled")
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)

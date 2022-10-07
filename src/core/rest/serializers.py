@@ -151,4 +151,4 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ['id', 'key', 'language', 'rank', 'title', 'groups', 'parent_question', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
                   'input_size', 'input_label', 'correct_value', 'default_value', 'value_min', 'value_max', 'value_interval', 'checkbox_min_options', 'checkbox_max_options',
                   'input_type', 'multiple_selection_type', 'status', 'options', 'children', 'show_previous_iteration', 'is_required', 'image_pairwise_type', 'show_balance',
-                  'territorial_coverages', 'use_google_street_images', 'use_360_image', 'show_only_on_parent_value', 'slider_label']
+                  'territorial_coverages', 'use_google_street_images', 'use_360_image', 'show_only_on_parent_value', 'slider_label', 'disabled_after_filled']
