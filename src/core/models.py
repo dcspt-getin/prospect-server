@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 # from tagging.fields import TagField
 from filer.fields.image import FilerImageField
+from housearch.models import TerritorialUnitImage
 from tinymce.models import HTMLField
 import reversion
 
@@ -103,6 +104,8 @@ class Question(models.Model):
 
     language = models.ForeignKey(
         Translation, on_delete=models.CASCADE, blank=True, null=True)
+    territorial_unit_image = models.ForeignKey(
+        TerritorialUnitImage, on_delete=models.CASCADE, related_name='territorial_unit_images', blank=True, null=True)
     rank = models.FloatField(blank=True, null=True)
     key = models.CharField(max_length=60, blank=True, null=True)
     title = models.CharField(max_length=256, blank=True, null=True)

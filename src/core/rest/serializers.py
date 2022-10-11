@@ -1,6 +1,7 @@
 
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, get_user_model
+from housearch.rest.serializers import TerritorialUnitImageSerializer
 from rest_framework import serializers
 from core.models import Configuration, GroupQuestions, Question, QuestionOption, Translation, UserProfile
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenObtainSerializer
@@ -140,6 +141,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     children = serializers.SerializerMethodField()
     groups = GroupQuestionSerializer(many=True, read_only=True)
     language = QuestionLanguageSerializer(read_only=True)
+    territorial_unit_image = TerritorialUnitImageSerializer(read_only=True)
 
     def get_children(self, obj):
         serializer = self.__class__(
@@ -151,4 +153,4 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ['id', 'key', 'language', 'rank', 'title', 'groups', 'parent_question', 'description', 'description_html', 'description_image', 'image_url', 'question_type',
                   'input_size', 'input_label', 'correct_value', 'default_value', 'value_min', 'value_max', 'value_interval', 'checkbox_min_options', 'checkbox_max_options',
                   'input_type', 'multiple_selection_type', 'status', 'options', 'children', 'show_previous_iteration', 'is_required', 'image_pairwise_type', 'show_balance',
-                  'territorial_coverages', 'use_google_street_images', 'use_360_image', 'show_only_on_parent_value', 'slider_label', 'disabled_after_filled']
+                  'territorial_coverages', 'use_google_street_images', 'use_360_image', 'show_only_on_parent_value', 'slider_label', 'disabled_after_filled', 'territorial_unit_image']
