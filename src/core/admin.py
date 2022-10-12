@@ -223,7 +223,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
                        'correct_value', 'is_required', 'show_balance', 'show_only_on_parent_value', 'question_type', 'disabled_after_filled'),
         }),
         ('Imagem', {
-            'fields': ('description_image', 'image_url', 'territorial_unit_image'),
+            'fields': ('description_image', 'image_url', 'territorial_unit_image', 'use_google_street_images', 'use_360_image'),
             'classes': ('collapse',),
         }),
         ('Opções de Resposta Curta', {
@@ -240,7 +240,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
             'classes': ('collapse',),
         }),
         ('Opções de Combinações de imagens par a par', {
-            'fields': ('image_pairwise_type', 'territorial_coverages', 'use_google_street_images', 'use_360_image'),
+            'fields': ('image_pairwise_type', 'territorial_coverages'),
             'classes': ('collapse',),
         }),
     )
