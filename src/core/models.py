@@ -111,6 +111,7 @@ class Question(models.Model):
     title = models.CharField(max_length=256, blank=True, null=True)
     description = models.CharField(max_length=256, blank=True, null=True)
     description_html = HTMLField(blank=True, null=True)
+    help = HTMLField(blank=True, null=True)
     description_image = FilerImageField(blank=True, null=True,
                                         related_name="question_image", on_delete=models.CASCADE)
     image_url = models.CharField(max_length=60, blank=True)

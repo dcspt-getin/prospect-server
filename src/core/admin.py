@@ -219,7 +219,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('id', 'rank', 'key', 'language', 'status', 'groups',
-                       'parent_question', 'title', 'description', 'description_html',
+                       'parent_question', 'title', 'description', 'description_html', 'help',
                        'correct_value', 'is_required', 'show_balance', 'show_only_on_parent_value', 'question_type', 'disabled_after_filled'),
         }),
         ('Imagem', {
