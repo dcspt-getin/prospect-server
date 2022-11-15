@@ -245,7 +245,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
         }),
     )
     list_display = ('id', 'rank', 'key', 'title', 'parent_question',
-                    'question_type', 'question_groups', 'status', 'language')
+                    'status', 'language', 'question_groups', 'question_type')
     list_filter = ('groups', 'status', 'question_type', 'language')
     inlines = [QuestionOptionInline]
     save_as = True
