@@ -1,4 +1,5 @@
 import math
+from django.utils.crypto import get_random_string
 from django.contrib.auth.models import User
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
@@ -12,9 +13,10 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 from django.db.models import Q
+from django.utils import timezone
 
 from .serializers import QuestionSerializer, TranslationSerializer, UserProfileSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer
-from core.models import ACTIVE, Configuration, GroupQuestions, Question, Translation, UserProfile
+from core.models import ACTIVE, Configuration, GroupQuestions, Question, Translation, UserProfile, UserIntegration, USER_INTEGRATION_TYPES
 
 
 class CustomDjangoModelPermissions(DjangoModelPermissions):
@@ -193,3 +195,81 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)
+
+
+class UserIntegrationsView(APIView):
+    permission_classes = []
+    http_method_names = ['post']
+
+    def post(self, request):
+        data = request.data
+        type = data.get('type')
+        session_id = data.get('session_id')
+        user_group = data.get('user_group')
+        data = data.get('data', {})
+
+        # Body validations
+        if not type:
+            return Response('type is required')
+        if not session_id:
+            return Response('session_id is required')
+        if not user_group:
+            return Response('user_group is required')
+        if not dict(USER_INTEGRATION_TYPES).get(type):
+            return Response('type is not allowed')
+
+        user_integration = None
+
+        # Check if user integration already exists
+        try:
+            user_integration = UserIntegration.objects.get(
+                type=type, meta__session_id=session_id, meta__user_group=user_group)
+        except UserIntegration.DoesNotExist:
+            # handle the exception
+            print('user_integration not exists')
+
+        # if not exists
+        #    1. create new Anonymous user
+        #    2. Associate the user with session questions group
+        #    3. Create new user integration for created user
+        if not user_integration:
+            meta = {
+                'session_id': session_id,
+                'user_group': user_group,
+            }
+
+            if data:
+                meta.update(data)
+
+            user = User.objects.create(
+                username='Anonymous User %s' % get_random_string(length=32))
+            user.groups.clear()
+
+            user_questions_groups = GroupQuestions.objects.filter(
+                pk=user_group)
+            for user_question_group in user_questions_groups:
+                for group in user_question_group.user_group.all():
+                    user.groups.add(group)
+
+            try:
+                user_integration = UserIntegration.objects.create(
+                    type=type, meta=meta, user=user)
+            except:
+                user.delete()
+
+                return Response('Failed to create user integration')
+
+        serializer = MyTokenObtainSerializer(
+            user_integration.user, context={'request': request})
+
+        refresh = serializer.get_token(user_integration.user)
+
+        user_integration.user.last_login = timezone.now()
+        user_integration.user.save(update_fields=["last_login"])
+
+        result = {}
+
+        result['refresh'] = str(refresh)
+        result['access'] = str(refresh.access_token)
+
+        return Response(result)

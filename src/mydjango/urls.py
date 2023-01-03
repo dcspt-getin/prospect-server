@@ -27,7 +27,7 @@ from rest_framework_simplejwt.views import (
 
 from core.views import ShowHelloWorld
 from core.rest.views import TranslationViewSet, UserProfileViewSet, UserViewSet, CurrentUserView, MyTokenObtainPairView, ConfigurationsViewSet, \
-    QuestionsViewSet, GroupQuestionsViewSet
+    QuestionsViewSet, GroupQuestionsViewSet, UserIntegrationsView
 
 from housearch.rest.views import TerritorialCoverageViewSet, TerritorialUnitViewSet
 
@@ -55,6 +55,8 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/me/', CurrentUserView.as_view(), name='current_user_view'),
+    path('api/user-integrations/session/token', UserIntegrationsView.as_view(),
+         name='user_integrations_view'),
     path('sentry-debug/', trigger_error),
     path('tinymce/', include('tinymce.urls')),
     path('', include('drfpasswordless.urls')),

@@ -46,6 +46,13 @@ IMAGE_PAIRWISE_COMBINATIONS_TYPES = [
     ('WEIGHT_BASED_CHOICE', 'Escolha com base em pesos'),
 ]
 
+LOCAL_SESSION = 'LOCAL_SESSION'
+PROLIFIC = 'PROLIFIC'
+USER_INTEGRATION_TYPES = [
+    (LOCAL_SESSION, 'Local Session'),
+    (PROLIFIC, 'Prolific'),
+]
+
 
 def input_label_default_value():
     return {"content": "", "position": "right"}
@@ -237,3 +244,18 @@ class UserProfile(models.Model):
     # @receiver(post_save, sender=User)
     # def save_user_profile(sender, instance, **kwargs):
     #     instance.profile.save()
+
+
+class UserIntegration(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    type = models.CharField(
+        max_length=30,
+        choices=USER_INTEGRATION_TYPES,
+        default='',
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    meta = models.JSONField(blank=True, null=True)

@@ -217,7 +217,10 @@ LOGGING = {
         'core': {
             'handlers': ['console'],
             'level': 'DEBUG',
-        }
+        },
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',
+        # },
         # 'celery': {
         #     'handlers': ['console'],
         #     'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
