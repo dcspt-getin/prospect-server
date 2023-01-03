@@ -259,3 +259,15 @@ class UserIntegration(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     meta = models.JSONField(blank=True, null=True)
+
+
+class Page(models.Model):
+    language = models.ForeignKey(
+        Translation, on_delete=models.CASCADE, blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    slug = models.CharField(max_length=60, blank=True, null=True)
+    title = models.CharField(max_length=256, blank=True, null=True)
+    content = HTMLField(blank=True, null=True)

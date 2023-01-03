@@ -15,8 +15,9 @@ import numpy as np
 from django.db.models import Q
 from django.utils import timezone
 
-from .serializers import QuestionSerializer, TranslationSerializer, UserProfileSerializer, UserSerializer, MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer
-from core.models import ACTIVE, Configuration, GroupQuestions, Question, Translation, UserProfile, UserIntegration, USER_INTEGRATION_TYPES
+from .serializers import QuestionSerializer, TranslationSerializer, UserProfileSerializer, UserSerializer, \
+    MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer, PageSerializer
+from core.models import ACTIVE, Configuration, GroupQuestions, Question, Translation, UserProfile, UserIntegration, USER_INTEGRATION_TYPES, Page
 
 
 class CustomDjangoModelPermissions(DjangoModelPermissions):
@@ -273,3 +274,9 @@ class UserIntegrationsView(APIView):
         result['access'] = str(refresh.access_token)
 
         return Response(result)
+
+
+class PagesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Page.objects.all()
+    serializer_class = PageSerializer
+    permission_classes = []

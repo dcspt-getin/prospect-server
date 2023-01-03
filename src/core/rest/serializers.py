@@ -3,11 +3,17 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, get_user_model
 from housearch.rest.serializers import TerritorialUnitImageSerializer
 from rest_framework import serializers
-from core.models import Configuration, GroupQuestions, Question, QuestionOption, Translation, UserProfile
+from core.models import Configuration, GroupQuestions, Question, QuestionOption, Translation, UserProfile, Page
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenObtainSerializer
 from rest_framework import exceptions
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.contrib.auth import password_validation
+
+
+def validate_password(value):
+    password_validation.validate_password(value)
+    return value
 
 
 class MyTokenObtainSerializer(TokenObtainPairSerializer, TokenObtainSerializer):
@@ -70,6 +76,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('id', 'username', 'password', 'email',
                   'first_name', 'last_name', 'groups', 'is_staff',)
+
+    def validate_password(self, value):
+        try:
+            validate_password(value)
+        except serializers.ValidationError as exc:
+            raise serializers.ValidationError(str(exc))
+        return value
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -155,3 +168,12 @@ class QuestionSerializer(serializers.ModelSerializer):
                   'input_type', 'multiple_selection_type', 'status', 'options', 'children', 'show_previous_iteration', 'is_required', 'image_pairwise_type', 'show_balance',
                   'territorial_coverages', 'use_google_street_images', 'use_360_image', 'show_only_on_parent_value', 'slider_label', 'disabled_after_filled', 'territorial_unit_image',
                   'help']
+
+
+class PageSerializer(serializers.ModelSerializer):
+    language = QuestionLanguageSerializer(read_only=True)
+    content = HTMLField()
+
+    class Meta:
+        model = Page
+        fields = ['id', 'title', 'slug', 'language', 'content']

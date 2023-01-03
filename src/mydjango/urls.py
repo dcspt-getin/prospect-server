@@ -27,7 +27,7 @@ from rest_framework_simplejwt.views import (
 
 from core.views import ShowHelloWorld
 from core.rest.views import TranslationViewSet, UserProfileViewSet, UserViewSet, CurrentUserView, MyTokenObtainPairView, ConfigurationsViewSet, \
-    QuestionsViewSet, GroupQuestionsViewSet, UserIntegrationsView
+    QuestionsViewSet, GroupQuestionsViewSet, UserIntegrationsView, PagesViewSet
 
 from housearch.rest.views import TerritorialCoverageViewSet, TerritorialUnitViewSet
 
@@ -40,6 +40,7 @@ router.register(r'groups-questions', GroupQuestionsViewSet)
 router.register(r'profiles', UserProfileViewSet)
 router.register(r'territorial-coverage', TerritorialCoverageViewSet)
 router.register(r'territorial-unit', TerritorialUnitViewSet)
+router.register(r'pages', PagesViewSet)
 
 
 def trigger_error(request):
