@@ -280,3 +280,8 @@ class PagesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Page.objects.all()
     serializer_class = PageSerializer
     permission_classes = []
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = {
+        'language': ["exact"],
+        'slug': ["exact"],
+    }

@@ -176,4 +176,4 @@ class PageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Page
-        fields = ['id', 'title', 'slug', 'language', 'content']
+        fields = ['id', 'title', 'slug', 'language', 'content', 'header_menu']

@@ -271,3 +271,10 @@ class Page(models.Model):
     slug = models.CharField(max_length=60, blank=True, null=True)
     title = models.CharField(max_length=256, blank=True, null=True)
     content = HTMLField(blank=True, null=True)
+    header_menu = models.BooleanField(
+        default=False, verbose_name="Visible on header menu")
+
+    class Meta:
+        permissions = ()
+        verbose_name = 'Page'
+        verbose_name_plural = 'Pages'
