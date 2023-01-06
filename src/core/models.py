@@ -247,7 +247,8 @@ class UserProfile(models.Model):
 
 
 class UserIntegration(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='users')
 
     type = models.CharField(
         max_length=30,
@@ -259,6 +260,11 @@ class UserIntegration(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     meta = models.JSONField(blank=True, null=True)
+
+    class Meta:
+        permissions = ()
+        verbose_name = 'User Integration'
+        verbose_name_plural = 'User Integrations'
 
 
 class Page(models.Model):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Permission
-from .models import Translation, Configuration, Question, QuestionOption, UserProfile, GroupQuestions, Page
+from .models import Translation, Configuration, Question, QuestionOption, UserProfile, GroupQuestions, Page, UserIntegration
 from django.template.response import TemplateResponse
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
@@ -27,6 +27,7 @@ from django.contrib.auth.forms import (
     UserChangeForm,
     UserCreationForm,
 )
+from django_admin_relation_links import AdminChangeLinksMixin
 
 
 @admin.register(Permission)
@@ -222,3 +223,16 @@ class PageAdmin(admin.ModelAdmin):
         models.JSONField: {'widget': JSONEditorWidget},
     }
     save_as = True
+
+
+@admin.register(UserIntegration)
+class UserIntegrationAdmin(AdminChangeLinksMixin, admin.ModelAdmin):
+    readonly_fields = ('id', 'created_at', 'updated_at',)
+    fields = ('id', 'created_at', 'updated_at',
+              'type', 'user', 'meta')
+    list_display = ('id', 'type', 'user_link')
+    list_filter = ('type', 'user',)
+    formfield_overrides = {
+        models.JSONField: {'widget': JSONEditorWidget},
+    }
+    change_links = ['user']
