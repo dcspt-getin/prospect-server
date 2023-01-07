@@ -180,6 +180,8 @@ class Question(models.Model):
         blank=True, null=True, default=slider_label_default_value)
     disabled_after_filled = models.BooleanField(
         default=True, verbose_name="Disabled after filled")
+    option_to_finish = models.CharField(
+        max_length=60, blank=True, null=True, default='', verbose_name="Option id to send user to the end")
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)

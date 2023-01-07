@@ -178,7 +178,7 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
             'classes': ('collapse',),
         }),
         ('Opções de Escolha multipla', {
-            'fields': ('multiple_selection_type', 'checkbox_min_options', 'checkbox_max_options'),
+            'fields': ('multiple_selection_type', 'checkbox_min_options', 'checkbox_max_options', 'option_to_finish'),
             'classes': ('collapse',),
         }),
         ('Opções de Combinações par a par', {
