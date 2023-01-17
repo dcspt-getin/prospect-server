@@ -68,7 +68,8 @@ class CurrentUserView(APIView):
         serializer = UserSerializer(request.user, context={'request': request})
         permissions = request.user.get_all_permissions()
 
-        result = {'permissions': permissions}
+        result = {'permissions': permissions,
+                  'last_login': request.user.last_login}
         result.update(serializer.data)
 
         return Response(result)
