@@ -2,6 +2,8 @@ import os
 from django.contrib import admin
 from django.contrib.auth.models import Permission
 from PIL import Image
+from urllib.parse import urlparse
+import re
 
 from core.models import Configuration
 from .models import TerritorialCoverage, TerritorialUnitImage, TerritorialUnit
@@ -132,14 +134,43 @@ def load_google_images(modeladmin, request, queryset):
     google_api_key = Configuration.objects.get(
         key=GOOGLE_API_KEY)
     for tu_image in queryset:
+        lat = None
+        long = None
+        url_path = None
+
+        # use geometry
+        if tu_image.geometry:
+            lat = tu_image.geometry['lat']
+            long = tu_image.geometry['lng']
+
+        # use image url only for google maps url
+        if tu_image.image_url:
+            parsed_url = urlparse(tu_image.image_url)
+            url_path = parsed_url.path
+
+            match = re.search(
+                r'\/maps\/@([\d.-]+),([\d.-]+),', parsed_url.path)
+            lat, long = match.groups()
+
+        # invalid lat and long go outside
+        if not lat or not long:
+            break
+
+        # get panoids
         panoids = streetview.panoids(
-            lat=tu_image.geometry['lat'], lon=tu_image.geometry['lng'])
+            lat=lat, lon=long)
 
         if len(panoids) == 0:
             break
 
         latest = sorted(panoids, key=lambda item: item.get(
             'year', 0), reverse=True)[0]
+
+        # check image url has inslcudes some of present panoids
+        if url_path:
+            for panoid in panoids:
+                if panoid['panoid'] in url_path:
+                    latest = panoid
 
         # creates a new empty image, RGB mode, and size 444 by 95
         new_im = Image.new('RGB', (1920, 600))
