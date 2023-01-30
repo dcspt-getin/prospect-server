@@ -25,6 +25,8 @@ from operator import itemgetter
 from .helpers import load_geo_json, import_territorial_unit_images_json
 
 GOOGLE_API_KEY = "GOOGLE_API_KEY"
+GOOGLE_IMAGE_RESOLUTION_WIDTH = "GOOGLE_IMAGE_RESOLUTION_WIDTH"
+GOOGLE_IMAGE_RESOLUTION_HEIGHT = "GOOGLE_IMAGE_RESOLUTION_HEIGHT"
 
 
 def import_action(self, request, import_method, *args, **kwargs):
@@ -133,6 +135,10 @@ def load_google_images(modeladmin, request, queryset):
     headings = [0, 120, 240]
     google_api_key = Configuration.objects.get(
         key=GOOGLE_API_KEY)
+    google_image_width = Configuration.objects.get(
+        key=GOOGLE_IMAGE_RESOLUTION_WIDTH)
+    google_image_height = Configuration.objects.get(
+        key=GOOGLE_IMAGE_RESOLUTION_HEIGHT)
     for tu_image in queryset:
         lat = None
         long = None
@@ -173,17 +179,22 @@ def load_google_images(modeladmin, request, queryset):
                     latest = panoid
 
         # creates a new empty image, RGB mode, and size 444 by 95
-        new_im = Image.new('RGB', (1920, 600))
+        total_width = 0
+        for heading in headings:
+            total_width += int(google_image_width.value)
+
+        new_im = Image.new(
+            'RGB', (total_width, int(google_image_height.value)))
         x_offset = 0
         downloaded_images = []
 
         for heading in headings:
             image = streetview.api_download(
-                latest['panoid'], heading, './media/streetview', google_api_key.value, 640, 640, 120)
+                latest['panoid'], heading, './media/streetview', google_api_key.value, int(google_image_width.value), int(google_image_height.value), 120)
 
             im = Image.open(image)
             new_im.paste(im, (x_offset, 0))
-            x_offset += 640
+            x_offset += int(google_image_width.value)
             downloaded_images.append(image)
 
         new_im.save('./media/streetview/{}.jpg'.format(latest['panoid']))
