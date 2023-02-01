@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, get_user_model
 from housearch.rest.serializers import TerritorialUnitImageSerializer
 from rest_framework import serializers
-from core.models import Configuration, GroupQuestions, Question, QuestionOption, Translation, UserProfile, Page
+from core.models import Configuration, GroupQuestions, Question, QuestionOption, Translation, UserProfile, Page, UserIntegration
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenObtainSerializer
 from rest_framework import exceptions
 from django.utils.translation import gettext_lazy as _
@@ -177,3 +177,10 @@ class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
         fields = ['id', 'title', 'slug', 'language', 'content', 'header_menu']
+
+
+class UserIntegrationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = UserIntegration
+        fields = ['id', 'created_at', 'updated_at',
+                  'type', 'user', 'meta']

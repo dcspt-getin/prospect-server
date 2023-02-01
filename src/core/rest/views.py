@@ -16,7 +16,7 @@ from django.db.models import Q
 from django.utils import timezone
 
 from .serializers import QuestionSerializer, TranslationSerializer, UserProfileSerializer, UserSerializer, \
-    MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer, PageSerializer
+    MyTokenObtainSerializer, ConfigurationSerializer, GroupQuestionSerializer, PageSerializer, UserIntegrationSerializer
 from core.models import ACTIVE, Configuration, GroupQuestions, Question, Translation, UserProfile, UserIntegration, USER_INTEGRATION_TYPES, Page
 
 
@@ -197,6 +197,17 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
 
         return Response(serializer.data)
+
+
+class UserIntegrationsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = UserIntegration.objects.all()
+    serializer_class = UserIntegrationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return self.queryset
+        return self.queryset.filter(user=self.request.user)
 
 
 class UserIntegrationsView(APIView):

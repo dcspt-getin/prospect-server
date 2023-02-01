@@ -27,7 +27,7 @@ from rest_framework_simplejwt.views import (
 
 from core.views import ShowHelloWorld
 from core.rest.views import TranslationViewSet, UserProfileViewSet, UserViewSet, CurrentUserView, MyTokenObtainPairView, ConfigurationsViewSet, \
-    QuestionsViewSet, GroupQuestionsViewSet, UserIntegrationsView, PagesViewSet
+    QuestionsViewSet, GroupQuestionsViewSet, UserIntegrationsView, PagesViewSet, UserIntegrationsViewSet
 
 from housearch.rest.views import TerritorialCoverageViewSet, TerritorialUnitViewSet
 
@@ -41,10 +41,7 @@ router.register(r'profiles', UserProfileViewSet)
 router.register(r'territorial-coverage', TerritorialCoverageViewSet)
 router.register(r'territorial-unit', TerritorialUnitViewSet)
 router.register(r'pages', PagesViewSet)
-
-
-def trigger_error(request):
-    division_by_zero = 1 / 0
+router.register(r'user-integrations', UserIntegrationsViewSet)
 
 
 urlpatterns = [
@@ -58,7 +55,6 @@ urlpatterns = [
     path('api/me/', CurrentUserView.as_view(), name='current_user_view'),
     path('api/user-integrations/session/token', UserIntegrationsView.as_view(),
          name='user_integrations_view'),
-    path('sentry-debug/', trigger_error),
     path('tinymce/', include('tinymce.urls')),
     path('', include('drfpasswordless.urls')),
 ]
