@@ -183,4 +183,4 @@ class UserIntegrationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = UserIntegration
         fields = ['id', 'created_at', 'updated_at',
-                  'type', 'user', 'meta']
+                  'type', 'user_id', 'user', 'meta']
