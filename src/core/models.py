@@ -281,6 +281,8 @@ class Page(models.Model):
     content = HTMLField(blank=True, null=True)
     header_menu = models.BooleanField(
         default=False, verbose_name="Visible on header menu")
+    is_homepage = models.BooleanField(
+        default=False, verbose_name="Is homepage")
 
     class Meta:
         permissions = ()

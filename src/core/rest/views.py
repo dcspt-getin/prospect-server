@@ -296,4 +296,5 @@ class PagesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     filter_fields = {
         'language': ["exact"],
         'slug': ["exact"],
+        'is_homepage': ["exact"],
     }

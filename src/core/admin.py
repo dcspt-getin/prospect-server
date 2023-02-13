@@ -216,9 +216,10 @@ class UserProfileAdmin(VersionAdmin):
 class PageAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'created_at', 'updated_at',)
     fields = ('id', 'created_at', 'updated_at',
-              'language', 'slug', 'header_menu', 'title', 'content')
-    list_display = ('id', 'title', 'slug', 'language', 'header_menu')
-    list_filter = ('language', 'header_menu',)
+              'language', 'slug', 'header_menu', 'is_homepage', 'title', 'content')
+    list_display = ('id', 'title', 'slug', 'language',
+                    'header_menu', 'is_homepage')
+    list_filter = ('language', 'header_menu', 'is_homepage')
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
