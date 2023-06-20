@@ -160,6 +160,8 @@ class Question(models.Model):
     )
     value_min = models.CharField(max_length=60, blank=True, null=True)
     value_max = models.CharField(max_length=60, blank=True, null=True)
+    min_chars = models.CharField(max_length=60, blank=True, null=True)
+    max_chars = models.CharField(max_length=60, blank=True, null=True)
     checkbox_min_options = models.IntegerField(blank=True, null=True)
     checkbox_max_options = models.IntegerField(blank=True, null=True)
     value_interval = models.CharField(
