@@ -27,6 +27,7 @@ QUESTION_TYPE_CHOICES = [
     ('CITIZEN_PROFILE', 'Citizen Profile'),
     ('TERRITORIAL_COVERAGE', 'Escolha de cobertura territorial'),
     ('GEOLOCATION', 'Escolha de Geolocalização'),
+    ('EMBEDDED_QUESTION', 'Embedded'),
 ]
 
 INPUT_TYPE_CHOICES = [
@@ -184,6 +185,10 @@ class Question(models.Model):
         default=True, verbose_name="Disabled after filled")
     option_to_finish = models.CharField(
         max_length=60, blank=True, null=True, default='', verbose_name="Option id to send user to the end")
+    embedded_question_url = models.CharField(
+        max_length=60, blank=True, null=True, verbose_name="Embeded Question External Url")
+    embedded_size = models.JSONField(
+        blank=True, null=True, default={})
 
     def __str__(self):
         return "%s - %s" % (self.id, self.key)

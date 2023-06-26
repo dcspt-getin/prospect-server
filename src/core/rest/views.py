@@ -198,6 +198,37 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    @action(detail=True, methods=['get'])
+    def question_info(self, request, pk=None):
+        question_id = request.query_params['id']
+
+        if not question_id:
+            return Response('question id is required')
+
+        user_profile = UserProfile.objects.get(id=pk)
+
+        return Response(user_profile.profile_data[question_id])
+
+    @action(detail=True, methods=['put'])
+    def question(self, request, pk=None):
+        question_id = request.data['id']
+
+        if not question_id:
+            return Response('question id is required')
+
+        user_profile = UserProfile.objects.get(id=pk)
+        new_profile_data = user_profile.profile_data
+
+        del request.data['id']
+
+        new_profile_data[question_id] = request.data
+        user_profile.profile_data = new_profile_data
+        user_profile.save()
+
+        serializer = self.get_serializer(user_profile, many=False)
+
+        return Response(serializer.data)
+
 
 class UserIntegrationsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = UserIntegration.objects.all()

@@ -189,6 +189,10 @@ class QuestionAdmin(nested_admin.NestedModelAdmin):
             'fields': ('image_pairwise_type', 'territorial_coverages'),
             'classes': ('collapse',),
         }),
+        ('Opções de Embedded', {
+            'fields': ('embedded_question_url', 'embedded_size'),
+            'classes': ('collapse',),
+        }),
     )
     list_display = ('id', 'rank', 'key', 'title', 'parent_question',
                     'status', 'language', 'question_groups', 'question_type')
