@@ -186,7 +186,7 @@ class Question(models.Model):
     option_to_finish = models.CharField(
         max_length=60, blank=True, null=True, default='', verbose_name="Option id to send user to the end")
     embedded_question_url = models.CharField(
-        max_length=60, blank=True, null=True, verbose_name="Embeded Question External Url")
+        max_length=268, blank=True, null=True, verbose_name="Embeded Question External Url")
     embedded_size = models.JSONField(
         blank=True, null=True, default={})
 
