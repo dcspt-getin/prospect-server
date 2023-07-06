@@ -202,10 +202,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     def question_info(self, request, pk=None):
         question_id = request.query_params['id']
 
-        if not question_id:
+        if question_id not in question_id:
             return Response('question id is required')
 
         user_profile = UserProfile.objects.get(id=pk)
+
+        if not user_profile.profile_data:
+            return Response('question id does not exists')
 
         return Response(user_profile.profile_data[question_id])
 
