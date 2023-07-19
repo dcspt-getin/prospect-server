@@ -223,7 +223,7 @@ class UserProfile(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    profile_data = models.JSONField(blank=True, null=True)
+    profile_data = models.JSONField(blank=True, null=True, default={})
     status = models.CharField(
         max_length=30,
         choices=STATUS_CHOICES,

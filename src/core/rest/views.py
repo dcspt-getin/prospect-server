@@ -222,6 +222,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         user_profile = UserProfile.objects.get(id=pk)
         new_profile_data = user_profile.profile_data
 
+        if new_profile_data is None:
+            new_profile_data = {}
+
         del request.data['id']
 
         new_profile_data[question_id] = request.data
