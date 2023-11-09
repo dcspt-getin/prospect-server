@@ -1,6 +1,6 @@
 # Prospect API
 
-## Run locally
+## Run Locally
 
 Requires Docker and Docker Compose. To run, execute:
 
@@ -33,6 +33,7 @@ MEDIA_URL_PREFIX=https://dcspt-getin.ua.pt/prospect
 SENDGRID_API_KEY=sdsdsad
 EMAIL_FROM=dcspt-getin@ua.pt
 DEBUG=1
+ALLOWED_HOSTS=dcspt-drivitup.ua.pt,dcspt-getin.ua.pt
 ```
 
 `DB_HOST` This variable specifies the hostname or IP address of the PostgreSQL database server. In this case, it's set to "postgres."
@@ -59,7 +60,33 @@ DEBUG=1
 
 `DEBUG` This variable is likely used to enable debugging. When set to 1, it indicates that the application is in debug mode, which is useful for identifying and fixing issues during development.
 
+`ALLOWED_HOSTS` A list of host/domain names splitted by comma that this Django site can serve. As example could be `dcspt-drivitup.ua.pt,dcspt-getin.ua.pt`
+
 _Note_: `DEBUG=1` for incomplete production server deployment.
+
+### Build
+
+First remove the last image built before if exists
+
+```bash
+docker rmi -f nmsilva90s/housepref-api
+```
+
+Build the image locally
+
+```bash
+docker build . -f compose/django/Dockerfile --no-cache -t nmsilva90s/housepref-api
+```
+
+Publish the image to Docker registry
+
+```bash
+docker login --username nmsilva90s -p <auth-login-key>
+
+docker push nmsilva90s/housepref-api:latest
+```
+
+Go to Portainer and pull the latest image and restart the container to run witth most recent container
 
 ### Nginx Configuration
 

@@ -37,6 +37,7 @@ services:
       - SENDGRID_API_KEY=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
       - EMAIL_FROM=dcspt-getin@ua.pt
       - DEBUG=1 # TODO: fix this
+      - ALLOWED_HOSTS=127.0.0.1,dcspt-drivitup.ua.pt,dcspt-getin.ua.pt
     networks:
       - default
 
