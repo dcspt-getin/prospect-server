@@ -35,6 +35,30 @@ EMAIL_FROM=dcspt-getin@ua.pt
 DEBUG=1
 ```
 
+`DB_HOST` This variable specifies the hostname or IP address of the PostgreSQL database server. In this case, it's set to "postgres."
+
+`DB_PORT` This variable defines the port number on which the PostgreSQL database server is running. The default port for PostgreSQL is 5432.
+
+`DB_PASSWORD` This variable holds the password required to authenticate and access the PostgreSQL database.
+
+`DB_USER` The username used to connect to the PostgreSQL database.
+
+`DB_NAME` This variable specifies the name of the PostgreSQL database to be used, which is "prospect" in this case.
+
+`CLIENT_BASE_URL` This variable represents the base URL for the client application. It seems to be pointing to "https://dcspt-getin.ua.pt/prospect/."
+
+`ADMIN_URL_PREFIX` This variable is likely used as a prefix for the admin URL. It's set to "prospect/" in this case.
+
+`STATIC_URL_PREFIX` This variable might be defining the prefix for static files' URLs. It's set to "/prospect."
+
+`MEDIA_URL_PREFIX` Similar to the CLIENT_BASE_URL, this variable defines the base URL for media files, such as images or uploads.
+
+`SENDGRID_API_KEY` This variable holds the API key for SendGrid, a service that can be used for sending emails.
+
+`EMAIL_FROM` The email address used as the sender when sending emails.
+
+`DEBUG` This variable is likely used to enable debugging. When set to 1, it indicates that the application is in debug mode, which is useful for identifying and fixing issues during development.
+
 _Note_: `DEBUG=1` for incomplete production server deployment.
 
 ### Nginx Configuration
